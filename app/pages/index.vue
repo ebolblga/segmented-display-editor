@@ -34,7 +34,12 @@ function logAllSegmentData() {
 }
 
 // TODO: implement
-function drawPreview() {}
+function drawPreview() {
+    console.log(appSettings.value.truthTable)
+    // for (const [key, val] of Object.entries(appSettings.value.truthTable)) {
+    //     console.log(key, val)
+    // }
+}
 </script>
 <template>
     <div>
@@ -49,7 +54,7 @@ function drawPreview() {}
                             :ref="(el: any) => setSegmentCanvas(el, i - 1)"
                             :width="appSettings.segmentWidth"
                             :height="appSettings.segmentHeight"
-                            :showGrid="true" />
+                            :color="getColor(appSettings.numSegments, i - 1)" />
                     </div>
                 </div>
             </div>

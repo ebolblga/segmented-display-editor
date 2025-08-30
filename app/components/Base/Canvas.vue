@@ -4,7 +4,7 @@ const DISPLAY_HEIGHT = 128 // visual container height for each segment (px)
 const props = defineProps<{
     width: number
     height: number
-    showGrid?: boolean
+    color: [r: number, g: number, b: number, a: number]
 }>()
 
 // compute an integer scale so rendered pixels are sharp
@@ -70,10 +70,10 @@ function setPixel(x: number, y: number) {
     if (!imageData) return
     if (x < 0 || x >= props.width || y < 0 || y >= props.height) return
     const i = (y * props.width + x) * 4
-    imageData.data[i] = 255
-    imageData.data[i + 1] = 255
-    imageData.data[i + 2] = 255
-    imageData.data[i + 3] = 255
+    imageData.data[i] = props.color[0]
+    imageData.data[i + 1] = props.color[1]
+    imageData.data[i + 2] = props.color[2]
+    imageData.data[i + 3] = props.color[3]
 }
 
 function clearPixel(x: number, y: number) {
@@ -125,27 +125,6 @@ function redrawVisible() {
     visibleCtx.clearRect(0, 0, props.width, props.height)
     visibleCtx.imageSmoothingEnabled = false
     visibleCtx.drawImage(offscreen, 0, 0)
-
-    if (props.showGrid) {
-        visibleCtx.save()
-        visibleCtx.lineWidth = 1
-        visibleCtx.strokeStyle = 'rgba(255,255,255,0.06)'
-        for (let i = 1; i < props.width; i++) {
-            const x = i + 0.5
-            visibleCtx.beginPath()
-            visibleCtx.moveTo(x, 0)
-            visibleCtx.lineTo(x, props.height)
-            visibleCtx.stroke()
-        }
-        for (let j = 1; j < props.height; j++) {
-            const y = j + 0.5
-            visibleCtx.beginPath()
-            visibleCtx.moveTo(0, y)
-            visibleCtx.lineTo(props.width, y)
-            visibleCtx.stroke()
-        }
-        visibleCtx.restore()
-    }
 }
 
 function getPointerPixelCoords(e: PointerEvent) {
