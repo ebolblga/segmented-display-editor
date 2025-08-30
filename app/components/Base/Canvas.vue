@@ -245,10 +245,7 @@ defineExpose(publicApi)
 </script>
 <template>
     <div :class="['inline-block', $attrs.class]" class="segment-wrapper">
-        <!-- fixed-height container (128px). Center the scaled canvas inside it. -->
         <div class="bg-black h-[128px] flex items-center justify-center p-2">
-            <!-- canvas logical resolution is props.width x props.height -->
-            <!-- CSS width/height is computedWidth/Height (integer scale) to keep pixel borders sharp -->
             <canvas
                 ref="visibleCanvas"
                 :width="props.width"
