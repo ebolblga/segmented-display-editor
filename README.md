@@ -1,9 +1,9 @@
-# template
-## A template repository
+# segmented-display-editor
+## A web application to make it easier to make segmented displays
 
-[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/ebolblga/template/blob/master/README.md) <!-- Edit URL here -->
-[![ru](https://img.shields.io/badge/lang-ru-red.svg)](https://github.com/ebolblga/template/blob/master/README.ru.md) <!-- Edit URL here -->
-![Vercel](https://vercelbadge.vercel.app/api/ebolblga/template) <!-- Edit URL here -->
+[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/ebolblga/segmented-display-editor/blob/master/README.md)
+[![ru](https://img.shields.io/badge/lang-ru-red.svg)](https://github.com/ebolblga/segmented-display-editor/blob/master/README.ru.md)
+![Vercel](https://vercelbadge.vercel.app/api/ebolblga/segmented-display-editor)
 <!-- DeepWiki badge here: https://deepwiki.ryoppippi.com/ -->
 
 ## Introduction
@@ -39,8 +39,8 @@ sudo apt install -y nodejs
 npm install --global yarn
 
 # Clone the repository and navigate into it
-git clone https://github.com/ebolblga/template.git
-cd template
+git clone https://github.com/ebolblga/segmented-display-editor.git
+cd segmented-display-editor
 
 # Install all dependencies
 yarn
@@ -49,40 +49,9 @@ yarn
 yarn dev
 ```
 
-## Setup with [Python](https://www.python.org/downloads/)
-```bash
-# Install the UV package manager
-curl -LsSf https://astral.sh/uv/install.sh | sh
-# powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex" on Windows
-
-# Clone the repository and navigate into it
-git clone https://github.com/ebolblga/template.git
-cd template
-
-# Create virtual environment and install dependencies
-uv sync
-
-# Activate virtual environment
-. .venv/bin/activate
-# .venv\Scripts\activate on Windows
-
-# Install pre-commit hooks
-uv run pre-commit install
-
-# Run pre-commit
-uv run pre-commit run --all-files
-
-# Ruff
-uv run ruff format
-uv run ruff check --fix
-
-# Run the script
-uv run python -m main
-```
-
 ## Contributors
-<a href="https://github.com/ebolblga/template/graphs/contributors"> <!-- Edit URL here -->
-  <img src="https://contrib.rocks/image?repo=ebolblga/template"/> <!-- Edit URL here -->
+<a href="https://github.com/ebolblga/segmented-display-editor/graphs/contributors"> <!-- Edit URL here -->
+  <img src="https://contrib.rocks/image?repo=ebolblga/segmented-display-editor"/> <!-- Edit URL here -->
 </a>
 
 ## [License](https://github.com/ebolblga/template/blob/master/LICENSE.md) <!-- Edit URL here -->

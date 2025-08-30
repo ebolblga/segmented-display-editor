@@ -6,16 +6,16 @@ Fork this Github repo and clone your fork locally. Then make changes in a local 
 
 See [creating a pull request from a fork](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork) for more information.
 
-To fork this repository simply [click here](https://github.com/ebolblga/template/fork).<!-- Update URL here -->
+To fork this repository simply [click here](https://github.com/ebolblga/segmented-display-editor/fork).
 
 ```bash
 # 1. Fork via GitHub UI
 # 2. Clone your fork locally (replace your-username)
-git clone git@github.com:your-username/template.git <!-- Update URL here -->
-cd template <!-- Update URL here -->
+git clone git@github.com:your-username/segmented-display-editor.git
+cd segmented-display-editor
 
 # Add upstream remote (original repo)
-git remote add upstream git@github.com:ebolblga/template.git <!-- Update URL here -->
+git remote add upstream git@github.com:ebolblga/segmented-display-editor.git
 git fetch upstream
 ```
 
@@ -88,43 +88,12 @@ sudo apt install -y nodejs
 npm install --global yarn
 
 # Clone the repository and navigate into it
-git clone https://github.com/ebolblga/template.git <!-- Update URL here -->
-cd template <!-- Update URL here -->
+git clone https://github.com/ebolblga/segmented-display-editor.git
+cd segmented-display-editor
 
 # Install all dependencies
 yarn
 
 # Start the project in development mode
 yarn dev
-```
-
-### Setup with [Python](https://www.python.org/downloads/)
-```bash
-# Install the UV package manager
-curl -LsSf https://astral.sh/uv/install.sh | sh
-# powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex" on Windows
-
-# Clone the repository and navigate into it
-git clone https://github.com/ebolblga/template.git <!-- Update URL here -->
-cd template <!-- Update URL here -->
-
-# Create virtual environment and install dependencies
-uv sync
-
-# Activate virtual environment
-. .venv/bin/activate
-# .venv\Scripts\activate on Windows
-
-# Install pre-commit hooks
-uv run pre-commit install
-
-# Run pre-commit
-uv run pre-commit run --all-files
-
-# Ruff
-uv run ruff format
-uv run ruff check --fix
-
-# Run the script
-uv run python -m main
 ```

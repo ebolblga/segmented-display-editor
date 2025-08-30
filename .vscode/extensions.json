@@ -1,0 +1,23 @@
+{
+    "recommendations": [
+        "bradlc.vscode-tailwindcss",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "exer7um.vue-3-vscode-snippets",
+        "formulahendry.auto-close-tag",
+        "formulahendry.auto-rename-tag",
+        "liamhammett.inline-parameters",
+        "michelemelluso.gitignore",
+        "MylesMurphy.prettify-ts",
+        "naumovs.color-highlight",
+        "pflannery.vscode-versionlens",
+        "PKief.material-icon-theme",
+        "roonie007.hide-files",
+        "shardulm94.trailing-spaces",
+        "steoates.autoimport",
+        "Vue.volar",
+        "Wscats.vue",
+        "xabikos.JavaScriptSnippets",
+        "yoavbls.pretty-ts-errors",
+    ]
+}
