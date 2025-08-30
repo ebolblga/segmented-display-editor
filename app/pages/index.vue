@@ -194,7 +194,8 @@ function drawPreview() {
 <template>
     <TheGitIcon />
     <ClientOnly class="w-full overflow-x-auto h-[20vh]">
-        <div class="flex items-center gap-4 px-4 py-3 border-2 rounded-lg border-secondary">
+        <div
+            class="flex items-center gap-4 px-4 py-3 border-2 rounded-lg border-secondary">
             <div
                 v-for="i in appSettings.numSegments"
                 :key="i"
@@ -214,19 +215,13 @@ function drawPreview() {
                 storageKey="app:settings"
                 @update:settings="handleSettingsUpdate" />
             <div class="mt-2 flex gap-2 items-center">
-                <BaseButton
-                    @click="clearAllSegments"
-                    class="px-3 py-1 rounded bg-gray-700 text-white">
+                <BaseButton @click="clearAllSegments">
                     Clear All Segments
                 </BaseButton>
-                <BaseButton
-                    @click="exportAllSegments"
-                    class="px-3 py-1 rounded bg-blue-600 text-white">
+                <BaseButton @click="exportAllSegments">
                     Export All Segments
                 </BaseButton>
-                <BaseButton
-                    @click="logAllSegmentData"
-                    class="px-3 py-1 rounded bg-gray-500 text-white">
+                <BaseButton @click="logAllSegmentData">
                     Log ImageData
                 </BaseButton>
             </div>

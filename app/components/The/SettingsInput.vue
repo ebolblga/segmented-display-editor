@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import type { AppSettings } from '@types'
-import { useDebounceFn } from '@vueuse/core';
+import { useDebounceFn } from '@vueuse/core'
 
 const props = defineProps<{ storageKey?: string }>()
-const emit = defineEmits<{ (e: 'update:settings', settings: AppSettings): void }>()
+const emit = defineEmits<{
+    (e: 'update:settings', settings: AppSettings): void
+}>()
 
 const text = ref<string>('')
 const errors = ref<string[]>([])
@@ -119,7 +121,7 @@ function validate(): boolean {
     return false
 }
 
-const debouncedSave = useDebounceFn(save, 500);
+const debouncedSave = useDebounceFn(save, 500)
 
 function save() {
     if (!validate()) return
@@ -173,25 +175,15 @@ defineExpose({ validate, save, clearInput, errors, text, parsed })
         <label class="block text-sm font-medium mb-2">App settings:</label>
         <textarea
             v-model="text"
-            rows="15"
+            rows="18"
             class="w-full p-2 border-2 rounded-lg border-secondary resize-y text-xs font-mono bg-background"
             @input="debouncedSave"
-            placeholder='{"baseUrl": "...", "numSegments": 4, "segmentWidth": 5, "segmentHeight": 9, "truthTable": {...}}'></textarea>
+            placeholder='{...}' />
 
         <div class="mt-2 flex gap-2">
-            <button
-                type="button"
-                @click="save"
-                class="px-3 py-1 rounded bg-gray-700 text-white text-sm">
-                Save
-            </button>
+            <BaseButton @click="save"> Save </BaseButton>
 
-            <button
-                type="button"
-                @click="clearInput"
-                class="px-3 py-1 rounded bg-gray-200 text-sm">
-                Clear
-            </button>
+            <BaseButton @click="clearInput"> Clear </BaseButton>
 
             <div v-if="isValid" class="ml-auto text-sm text-green-700">
                 Valid
