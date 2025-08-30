@@ -11,3 +11,7 @@ export interface AppSettings {
     segmentHeight: number
     truthTable: { [key: string]: number[] }
 }
+
+export interface OverlayMode {
+    mode: 'screen' | 'additive'
+}

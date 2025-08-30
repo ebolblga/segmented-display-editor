@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { AppSettings } from '@types'
+import { useDebounceFn } from '@vueuse/core';
 
 const props = defineProps<{ storageKey?: string }>()
 const emit = defineEmits<{ (e: 'update:settings', settings: AppSettings): void }>()
@@ -118,6 +119,8 @@ function validate(): boolean {
     return false
 }
 
+const debouncedSave = useDebounceFn(save, 500);
+
 function save() {
     if (!validate()) return
     if (props.storageKey) {
@@ -171,7 +174,8 @@ defineExpose({ validate, save, clearInput, errors, text, parsed })
         <textarea
             v-model="text"
             rows="15"
-            class="w-full p-2 border rounded resize-y text-xs font-mono bg-background"
+            class="w-full p-2 border-2 rounded-lg border-secondary resize-y text-xs font-mono bg-background"
+            @input="debouncedSave"
             placeholder='{"baseUrl": "...", "numSegments": 4, "segmentWidth": 5, "segmentHeight": 9, "truthTable": {...}}'></textarea>
 
         <div class="mt-2 flex gap-2">

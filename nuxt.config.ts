@@ -5,7 +5,7 @@ import { resolve } from 'path'
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: false },
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/icon', '@nuxt/fonts', '@vueuse/nuxt'],
   alias: {
     '@types': resolve(__dirname, './types/types.ts'),
   },
