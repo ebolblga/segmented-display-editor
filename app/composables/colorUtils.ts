@@ -2,7 +2,6 @@ export function getColor(
     numSegments: number,
     index: number
 ): [number, number, number, number] {
-        console.log(numSegments, index)
     // Clamp edge cases
     if (numSegments <= 0) return [0, 0, 0, 255]
 
@@ -42,13 +41,6 @@ export function getColor(
         g = 0
         b = x
     }
-
-    console.log([
-        Math.round((r + m) * 255),
-        Math.round((g + m) * 255),
-        Math.round((b + m) * 255),
-        255,
-    ])
 
     // Scale to 0–255
     return [

@@ -33,12 +33,89 @@ function logAllSegmentData() {
     })
 }
 
-// TODO: implement
 function drawPreview() {
-    console.log(appSettings.value.truthTable)
-    // for (const [key, val] of Object.entries(appSettings.value.truthTable)) {
-    //     console.log(key, val)
-    // }
+    if (!charMapCanvas.value) return
+    const outCanvas = charMapCanvas.value
+    const ctx = outCanvas.getContext('2d')
+    if (!ctx) return
+
+    const truthTable: { [key: string]: number[] } = {
+        "0": [1, 0, 1, 1],
+        "1": [0, 0, 0, 1],
+        "2": [0, 0, 1, 0],
+        "3": [1, 0, 1, 0],
+        "4": [0, 1, 0, 0],
+        "5": [0, 1, 1, 0],
+        "6": [0, 1, 1, 1],
+        "7": [1, 0, 0, 0],
+        "8": [1, 1, 1, 1],
+        "9": [1, 1, 1, 0]
+    }
+
+    const keys = Object.keys(truthTable)
+
+    const numChars = keys.length
+    const numSegments = appSettings.value.numSegments
+    const segmentWidth = appSettings.value.segmentWidth
+    const segmentHeight = appSettings.value.segmentHeight
+
+    const totalWidth = segmentWidth * numChars
+    const totalHeight = segmentHeight * 3
+
+    outCanvas.width = totalWidth
+    outCanvas.height = totalHeight
+
+    ctx.fillStyle = '#000'
+    ctx.fillRect(0, 0, outCanvas.width, outCanvas.height)
+
+    const canvasImageData = ctx.getImageData(0, 0, totalWidth, totalHeight)
+    const data = canvasImageData.data
+
+    keys.forEach((key, digitIndex) => {
+        const segments = truthTable[key]
+        if (!segments) return
+
+        segments.forEach((isOn, segIndex) => {
+            if (!isOn) return
+            const segmentCanvas = segmentCanvases.value[segIndex]
+            if (!segmentCanvas) return
+            const segImageData = segmentCanvas.getImageData()
+
+            if (!segImageData) return
+
+            const segData = segImageData.data
+
+            // x/y position of this digit
+            const xOffset = digitIndex * segmentWidth
+            const yOffset = 0 // first row
+
+            const canvasLength = data.length
+            const segLength = segData.length
+
+            for (let y = 0; y < segmentHeight; y++) {
+                for (let x = 0; x < segmentWidth; x++) {
+                    const idx = (y * segmentWidth + x) * 4
+                    const canvasIdx = ((y + yOffset) * totalWidth + (x + xOffset)) * 4
+
+                    // bounds check to satisfy TypeScript
+                    if (canvasIdx + 3 >= canvasLength || idx + 3 >= segLength) continue
+                    // @ts-ignore
+                    data[canvasIdx + 0] = Math.min(data[canvasIdx + 0] + segData[idx + 0], 255)
+                    // @ts-ignore
+                    data[canvasIdx + 1] = Math.min(data[canvasIdx + 1] + segData[idx + 1], 255)
+                    // @ts-ignore
+                    data[canvasIdx + 2] = Math.min(data[canvasIdx + 2] + segData[idx + 2], 255)
+                    data[canvasIdx + 3] = 255
+                }
+            }
+        })
+    })
+
+    ctx.putImageData(canvasImageData, 0, 0)
+}
+
+function onImageDataUpdate() {
+    drawPreview()
 }
 </script>
 <template>
@@ -54,7 +131,8 @@ function drawPreview() {
                             :ref="(el: any) => setSegmentCanvas(el, i - 1)"
                             :width="appSettings.segmentWidth"
                             :height="appSettings.segmentHeight"
-                            :color="getColor(appSettings.numSegments, i - 1)" />
+                            :color="getColor(appSettings.numSegments, i - 1)"
+                            @update:image-data="onImageDataUpdate" />
                     </div>
                 </div>
             </div>
@@ -88,10 +166,15 @@ function drawPreview() {
             </div>
             <div class="mt-3">
                 <div class="text-sm mb-2">Preview</div>
-                <div class="p-2 inline-block bg-black">
-                    <canvas ref="charMapCanvas"></canvas>
+                <div class="p-2 inline-block">
+                    <canvas ref="charMapCanvas" class="h-[300px] bg-black"></canvas>
                 </div>
             </div>
         </div>
     </div>
 </template>
+<style scoped>
+canvas {
+    image-rendering: pixelated;
+}
+</style>

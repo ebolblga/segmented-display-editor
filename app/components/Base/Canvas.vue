@@ -224,13 +224,13 @@ defineExpose(publicApi)
 </script>
 <template>
     <div :class="['inline-block', $attrs.class]" class="segment-wrapper">
-        <div class="bg-black h-[128px] flex items-center justify-center p-2">
+        <div class="h-[128px] flex items-center justify-center p-2">
             <canvas
                 ref="visibleCanvas"
                 :width="props.width"
                 :height="props.height"
                 :style="{ width: cssWidth, height: cssHeight }"
-                class="block touch-none select-none"
+                class="block touch-none select-none bg-black"
                 @pointerdown="onPointerDown"
                 @pointermove="onPointerMove"
                 @pointerup="onPointerUp"
