@@ -53,7 +53,7 @@ export const presets: PresetOption[] = [
     { label: '7 segment display A', path: 'presets/7-seg-a.json' },
     { label: '8 segment display A', path: 'presets/8-seg-a.json' },
     { label: '8 segment display B', path: 'presets/8-seg-b.json' },
-    { label: '8 segment display C', path: 'presets/8-seg-c.json' },
+    { label: '8 segment display C (disconnected)', path: 'presets/8-seg-c.json' },
     { label: '9 segment display A', path: 'presets/9-seg-a.json' },
     { label: '10 segment display A (overlap)', path: 'presets/10-seg-a.json' },
     { label: '11 segment display A', path: 'presets/11-seg-a.json' },
