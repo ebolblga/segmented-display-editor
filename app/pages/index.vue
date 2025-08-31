@@ -337,24 +337,26 @@ async function exportYalSettings() {
 <template>
     <div>
         <TheGitIcon />
-        <ClientOnly class="h-[20vh] w-full overflow-x-auto">
-            <div
-                class="flex items-center gap-4 rounded-lg border-2 border-secondary px-4 py-3">
+        <div class="min-h-[190.59px]">
+            <ClientOnly class="h-[20vh] w-full overflow-x-auto">
                 <div
-                    v-for="i in appSettings.numSegments"
-                    :key="i"
-                    class="flex-shrink-0">
-                    <BaseCanvas
-                        :ref="(el: any) => setSegmentCanvas(el, i - 1)"
-                        :width="appSettings.segmentWidth"
-                        :height="appSettings.segmentHeight"
-                        :color="getColor(appSettings.numSegments, i - 1)"
-                        @update:image-data="drawPreview" />
+                    class="flex items-center gap-4 rounded-lg border-2 border-secondary px-4 py-3">
+                    <div
+                        v-for="i in appSettings.numSegments"
+                        :key="i"
+                        class="flex-shrink-0">
+                        <BaseCanvas
+                            :ref="(el: any) => setSegmentCanvas(el, i - 1)"
+                            :width="appSettings.segmentWidth"
+                            :height="appSettings.segmentHeight"
+                            :color="getColor(appSettings.numSegments, i - 1)"
+                            @update:image-data="drawPreview" />
+                    </div>
                 </div>
-            </div>
-        </ClientOnly>
-        <div class="flex h-[80vh] w-full flex-row">
-            <div class="h-full w-[25vw] p-4">
+            </ClientOnly>
+        </div>
+        <div class="flex h-[80vh] w-full flex-col lg:flex-row">
+            <div class="h-full w-full p-4 lg:w-[25vw]">
                 <NuxtLink to="/about" class="text-accent">{{
                     '<- About this tool'
                 }}</NuxtLink>
@@ -385,7 +387,7 @@ async function exportYalSettings() {
                     storage-key="app:settings"
                     @update:settings="handleSettingsUpdate" />
             </div>
-            <div class="flex h-full w-[75vw] justify-center p-4">
+            <div class="flex h-full w-full justify-center p-4 lg:w-[75vw]">
                 <canvas
                     ref="charMapCanvas"
                     class="my-auto w-full bg-black [image-rendering:pixelated]" />

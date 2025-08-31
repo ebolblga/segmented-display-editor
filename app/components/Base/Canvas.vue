@@ -22,6 +22,14 @@ const drawing = ref(false)
 const lastPoint = ref<{ x: number; y: number } | null>(null)
 const currentMode = ref<'draw' | 'erase' | null>(null)
 
+/* === NEW: touch / long-press state === */
+let longPressTimer: number | null = null
+let isLongPress = false
+let touchStartClient: { x: number; y: number } | null = null
+let movedWhileTouching = false
+const LONG_PRESS_MS = 500
+const MOVE_TOLERANCE = 6 // px
+
 // Initialize canvases (client only)
 function initCanvases() {
     if (typeof window === 'undefined' || !visibleCanvas.value) return
@@ -73,6 +81,11 @@ onBeforeUnmount(() => {
     offscreenCtx = null
     offscreen = null
     imageData = null
+    // clear any lingering timers
+    if (longPressTimer !== null) {
+        clearTimeout(longPressTimer)
+        longPressTimer = null
+    }
 })
 
 function clamp(v: number, a: number, b: number) {
@@ -165,6 +178,22 @@ function getPointerPixelCoords(e: PointerEvent) {
     }
 }
 
+/* === NEW helper: map client coords (from stored touch) to pixel coords === */
+function clientToPixel(clientX: number, clientY: number) {
+    if (!visibleCanvas.value) return null
+    const rect = visibleCanvas.value.getBoundingClientRect()
+    const x = Math.floor(
+        ((clientX - rect.left) / rect.width) * visibleCanvas.value.width
+    )
+    const y = Math.floor(
+        ((clientY - rect.top) / rect.height) * visibleCanvas.value.height
+    )
+    return {
+        x: clamp(x, 0, visibleCanvas.value.width - 1),
+        y: clamp(y, 0, visibleCanvas.value.height - 1),
+    }
+}
+
 function onPointerDown(e: PointerEvent) {
     e.preventDefault()
     if (!visibleCanvas.value) return
@@ -178,34 +207,110 @@ function onPointerDown(e: PointerEvent) {
         // Ignore capture errors
     }
 
-    // Right button (2) => erase, otherwise draw
-    currentMode.value = e.button === 2 ? 'erase' : 'draw'
+    // MOUSE / PEN: keep existing immediate behaviour (right-click = erase)
+    if (e.pointerType === 'mouse' || e.pointerType === 'pen') {
+        currentMode.value = e.button === 2 ? 'erase' : 'draw'
+        drawing.value = true
+
+        const p = getPointerPixelCoords(e)
+        if (!p) return
+
+        if (currentMode.value === 'erase') applyEraseAt(p.x, p.y)
+        else applyBrushAt(p.x, p.y)
+
+        lastPoint.value = { x: p.x, y: p.y }
+        redrawVisible()
+        return
+    }
+
+    // TOUCH: don't immediately place a pixel. Start long-press timer for erase.
     drawing.value = true
+    currentMode.value = null
+    isLongPress = false
+    movedWhileTouching = false
+    touchStartClient = { x: e.clientX, y: e.clientY }
 
-    const p = getPointerPixelCoords(e)
-    if (!p) return
-
-    if (currentMode.value === 'erase') applyEraseAt(p.x, p.y)
-    else applyBrushAt(p.x, p.y)
-
-    lastPoint.value = { x: p.x, y: p.y }
-    redrawVisible()
+    // start long-press timer
+    if (longPressTimer !== null) {
+        clearTimeout(longPressTimer)
+        longPressTimer = null
+    }
+    const startX = e.clientX
+    const startY = e.clientY
+    longPressTimer = window.setTimeout(() => {
+        longPressTimer = null
+        isLongPress = true
+        // compute pixel coords from stored client coords (don't rely on event)
+        const p = clientToPixel(startX, startY)
+        if (!p) return
+        currentMode.value = 'erase'
+        applyEraseAt(p.x, p.y)
+        lastPoint.value = { x: p.x, y: p.y } // so dragging continues from here
+        redrawVisible()
+    }, LONG_PRESS_MS)
 }
 
 function onPointerMove(e: PointerEvent) {
     if (!drawing.value) return
-    const p = getPointerPixelCoords(e)
-    if (!p) return
-    const last = lastPoint.value
-    if (!last) {
-        if (currentMode.value === 'erase') applyEraseAt(p.x, p.y)
-        else applyBrushAt(p.x, p.y)
-        lastPoint.value = { x: p.x, y: p.y }
-    } else {
-        drawLine(last.x, last.y, p.x, p.y)
-        lastPoint.value = { x: p.x, y: p.y }
+
+    // TOUCH: detect move beyond tolerance -> cancel long press and start drawing
+    if (e.pointerType === 'touch') {
+        if (touchStartClient) {
+            const dx = e.clientX - touchStartClient.x
+            const dy = e.clientY - touchStartClient.y
+            const dist2 = dx * dx + dy * dy
+            if (
+                !movedWhileTouching &&
+                dist2 > MOVE_TOLERANCE * MOVE_TOLERANCE
+            ) {
+                movedWhileTouching = true
+                // cancel long-press timer if running
+                if (longPressTimer !== null) {
+                    clearTimeout(longPressTimer)
+                    longPressTimer = null
+                }
+                // if we weren't in long-press erase mode, switch to draw mode
+                if (!isLongPress) currentMode.value = 'draw'
+                // set lastPoint to current pixel so drawing continues smoothly
+                const p = clientToPixel(e.clientX, e.clientY)
+                if (p) lastPoint.value = { x: p.x, y: p.y }
+            }
+        }
+
+        // draw/erase while moving if we've started dragging or we are already in erase (long-press)
+        if ((movedWhileTouching || isLongPress) && currentMode.value) {
+            const p = clientToPixel(e.clientX, e.clientY)
+            if (!p) return
+            const last = lastPoint.value
+            if (!last) {
+                if (currentMode.value === 'erase') applyEraseAt(p.x, p.y)
+                else applyBrushAt(p.x, p.y)
+                lastPoint.value = { x: p.x, y: p.y }
+            } else {
+                drawLine(last.x, last.y, p.x, p.y)
+                lastPoint.value = { x: p.x, y: p.y }
+            }
+            redrawVisible()
+        }
+        return
     }
-    redrawVisible()
+
+    // Mouse/pen: original behavior (draw while holding left button)
+    if (e.pointerType === 'mouse' || e.pointerType === 'pen') {
+        if (!drawing.value) return
+        const p = getPointerPixelCoords(e)
+        if (!p) return
+        const last = lastPoint.value
+        if (!last) {
+            if (currentMode.value === 'erase') applyEraseAt(p.x, p.y)
+            else applyBrushAt(p.x, p.y)
+            lastPoint.value = { x: p.x, y: p.y }
+        } else {
+            drawLine(last.x, last.y, p.x, p.y)
+            lastPoint.value = { x: p.x, y: p.y }
+        }
+        redrawVisible()
+    }
 }
 
 function onPointerUp(e: PointerEvent) {
@@ -217,9 +322,36 @@ function onPointerUp(e: PointerEvent) {
     } catch {
         // Ignore
     }
+
+    // clear long-press timer if still pending
+    if (longPressTimer !== null) {
+        clearTimeout(longPressTimer)
+        longPressTimer = null
+    }
+
+    // TOUCH: decide tap (place) vs long-press (already handled) vs drag (already drawn)
+    if (e.pointerType === 'touch') {
+        if (!isLongPress && !movedWhileTouching) {
+            // treat as tap -> place pixel
+            if (touchStartClient) {
+                const p = clientToPixel(e.clientX, e.clientY)
+                if (p) {
+                    currentMode.value = 'draw'
+                    applyBrushAt(p.x, p.y)
+                    redrawVisible()
+                }
+            }
+        }
+        // if long-press was active, erase already applied (and dragging erased)
+    }
+
     drawing.value = false
     lastPoint.value = null
     currentMode.value = null
+    isLongPress = false
+    movedWhileTouching = false
+    touchStartClient = null
+
     if (imageData) emit('update:imageData', imageData)
 }
 
