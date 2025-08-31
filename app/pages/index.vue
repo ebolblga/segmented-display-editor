@@ -276,6 +276,51 @@ function checkTable() {
         )
     }
 }
+
+async function exportYalSettings() {
+    // Load JSON with default settings
+    const response = await fetch('/yal-settings.json')
+    if (!response.ok) throw new Error('Failed to load default settings')
+    const json = await response.json()
+
+    // Patch JSON
+    const inGlyphs: string = Object.keys(appSettings.value.truthTable).join('')
+    const glyphHeight = appSettings.value.segmentHeight
+    const padding = 1
+
+    json['in-glyphs'] = inGlyphs
+    json['font-sample-text'] = inGlyphs
+    json['font-preview-text'] = inGlyphs
+    json['glyph-width'] = appSettings.value.segmentWidth
+    json['glyph-height'] = glyphHeight
+    json['font-name'] = `${appSettings.value.numSegments} Segment Display`
+    json['glyph-ofs-y'] = 2 * (glyphHeight + padding * 2) + padding
+    json['glyph-baseline'] = glyphHeight - 1
+
+    // Download JSON
+    const blob = new Blob([JSON.stringify(json, null, 2)], {
+        type: 'application/json',
+    })
+    const url = URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'yal-settings.json'
+    link.click()
+
+    URL.revokeObjectURL(url)
+
+    // Download character map
+    if (charMapCanvas.value) {
+        const canvas = charMapCanvas.value
+        const dataURL = canvas.toDataURL('image/png')
+
+        const link = document.createElement('a')
+        link.href = dataURL
+        link.download = 'character-map.png'
+        link.click()
+    }
+}
 </script>
 
 <template>
@@ -310,10 +355,19 @@ function checkTable() {
                     <BaseButton @click="clearAllSegments">
                         Clear All Segments
                     </BaseButton>
+                    <BaseButton @click="checkTable"> Check Table </BaseButton>
+                </div>
+                <div class="mb-2 flex items-center gap-2">
                     <BaseButton @click="saveSettingsIncludingCanvases">
                         Export Settings
                     </BaseButton>
-                    <BaseButton @click="checkTable"> Check Table </BaseButton>
+                    <BaseButton @click="exportYalSettings">
+                        <a
+                            href="https://yal.cc/tools/pixel-font/"
+                            target="_blank"
+                            >Export Yal Settings</a
+                        >
+                    </BaseButton>
                 </div>
                 <TheSettingsInput
                     ref="settingsInputRef"

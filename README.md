@@ -12,6 +12,7 @@
 <!-- DeepWiki badge here: https://deepwiki.ryoppippi.com/ -->
 
 ## Introduction
+
 This is a companion tool made for a project that will be published a bit later. It's goal was to design 4 segment display using ML. Early in the development I ran into a problem of trying out the design in action or modifying it, thus this tool was made to make my life easier.
 
 > [!NOTE]
@@ -62,6 +63,7 @@ When you are done with number of segments, their dimensions and the character tr
 On the top of the page you can see `0...n` segments being displayed. You can draw on each segment with left mouse button and you can clear pixels using right mouse button. Changes will automatically appear on the map output for all the characters you added to the truth table.
 
 Settings JSON is getting validated:
+
 - it checks that all number arrays are of same length as `numSegments` parameter
 - it checks that there are no similar rows - meaning no two characters have same truth table
 
@@ -70,9 +72,18 @@ This is a simple helper function. It is possible that your truth table contains 
 
 **Exporting**
 
-You can export settings via "*Export settings*" button, that will download JSON file with all the data including your segments encoded as base64 strings. If you'd like to import your saved settings back you can just paste in JSON file contents into app settings text area.
+You can export settings via "_Export settings_" button, that will download JSON file with all the data including your segments encoded as base64 strings. If you'd like to import your saved settings back you can just paste in JSON file contents into app settings text area.
 
-As for segments and map as image files, just right click on them and click "*Save as..*"
+As for segments and map as image files, just right click on them and click "_Save as.._"
+
+**Generating a font**
+
+If you click "_Export Yal Settings_" button it will download `yal-settings.json` and `character-map.png` files. They are meant to be imported on the [Yal pixel font website](https://yal.cc/tools/pixel-font/).
+
+> [!WARNING]
+> I have no relation to the Yal website - if API changes or the site goes down, you will loose font generation feature.
+
+After clicking the button you will be redirected to the Yal website. Click "_Menu_" button and then "_Import settings_" and choose downloaded `yal-settings.json` file. Next click "_Pick image_" button and choose `character-map.png` file. Now you can edit some metadata and generate the font in TTF or OTF formats.
 
 ## Examples
 
