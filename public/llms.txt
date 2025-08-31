@@ -1,0 +1,29 @@
+# Segmented Display Editor
+
+> Segmented Display Editor — a web application to design and preview custom segmented (pixel) displays. Create segment shapes, build truth tables mapping characters to segment activation patterns, validate and export settings, and generate pixel fonts via an external tool (Yal).
+
+This project is a companion tool for designing segmented displays (example presets provided). It focuses on authoring segment geometry, truth tables, and producing exports usable for font generation and image/map exports.
+
+Important notes:
+- Exported settings include segments encoded as base64 and a `yal-settings.json` + `character-map.png` pair for Yal (https://yal.cc/tools/pixel-font/). The Yal site is a third‑party dependency and may change.
+- The app validates that each truth-table row has length equal to `numSegments` and rejects duplicate rows (two characters with the same segment pattern).
+- Contributions welcome — see the repository contributing info on GitHub.
+
+## Docs
+- [README (English)](https://github.com/ebolblga/segmented-display-editor/blob/master/README.md): Project overview, usage, examples, and setup instructions.
+- [README (Russian)](https://github.com/ebolblga/segmented-display-editor/blob/master/README.ru.md): Russian translation.
+
+## Repo
+- [GitHub repository](https://github.com/ebolblga/segmented-display-editor): Source code, issues, contributors, and release history.
+
+## Examples
+- Examples and presets are embedded in the README (various 4–18 segment display examples, with notes about disconnected pieces and overlaps). See the README for images and descriptions.
+
+## Setup (quick)
+- Node.js (v18+ / v20+ recommended) + yarn. See the README for exact commands and development workflow.
+
+## License
+- [MIT License](https://github.com/ebolblga/segmented-display-editor/blob/master/LICENSE.md)
+
+## Optional
+- [Yal pixel font tool](https://yal.cc/tools/pixel-font/): Use `yal-settings.json` + `character-map.png` exported from the app to generate TTF/OTF fonts.

@@ -1,3 +1,6 @@
+<script setup lang="ts">
+
+</script>
 <template>
     <div class="m-0 bg-background text-xs text-text lg:text-sm">
         <slot />

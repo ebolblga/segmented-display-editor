@@ -1,0 +1,41 @@
+# Segmented Display Editor
+
+> Segmented Display Editor — a web application to design and preview custom segmented (pixel) displays. Create segment shapes, build truth tables mapping characters to segment activation patterns, validate and export settings, and generate pixel fonts via an external tool (Yal).
+
+This file expands on the project README and provides direct links and notes for LLMs and agents that need more context at inference time. It contains a short project summary, usage details, example descriptions, setup instructions, and links to core files and external tools.
+
+Project summary and purpose
+- Companion tool to design segmented displays (used while developing a larger ML project). Helps iterate on segment geometry and mapping from characters to segment activation patterns.
+- Exports include full settings JSON (with segments encoded as base64), images (segment previews and character map), and a `yal-settings.json` that pairs with `character-map.png` for font generation using the Yal tool.
+
+How to use (high level)
+- Design truth table: Provide `numSegments`, segment dimensions, and a `truthTable` mapping characters to arrays of 0/1 of length `numSegments`. Example JSON is present in the README.
+- Design segments: Draw each segment in the UI; left-click to set pixels, right-click to clear. Changes reflect in the character map instantly.
+- Validation: The app checks array lengths and rejects duplicate rows (identical truth table entries). A "Check table" helper can detect segments with identical activation patterns (candidates for merging).
+- Exporting: Use _Export settings_ to download a JSON file (includes base64-encoded segment images). Right-click segment/map images in the UI to save PNGs. Use _Export Yal Settings_ to get `yal-settings.json` + `character-map.png` for Yal import.
+- Generating fonts with Yal: After exporting, import `yal-settings.json` and `character-map.png` on https://yal.cc/tools/pixel-font/ and generate TTF/OTF. The project has no affiliation with Yal — the site could change or disappear.
+
+Examples (as described in the README)
+- Multiple presets and example segment sets: 4‑segment displays (A–D), 5‑segment (A), 6‑segment (A–C), 7/8/9/10/11/12/13/15/18 segment examples; notes include "disconnected" (segments with separated pieces) and "overlap" (segments that cross/overlap). Authors credited where provided (e.g., Mogi Mogi, Posy, Yenji Jem, Serjão). See README image gallery for visuals.
+
+Setup (detailed)
+- Install Node.js (v18+ recommended; v20+ suggested for dev).
+- Install Yarn via npm.
+- Clone repo, `yarn` to install dependencies, `yarn dev` to run in development, `yarn format` and `yarn lint` for formatting/linting.
+- Exact commands are in the README under "Setup with Node.js".
+
+Contributing & Maintenance
+- Contributions are welcome. The README links to contributing guidance on the GitHub repository (`?tab=contributing-ov-file` in the README — check repository contributing files/PR template there).
+
+## Files
+- [README (English)](https://github.com/ebolblga/segmented-display-editor/blob/master/README.md): Full project README with examples, screenshots, and instructions.
+- [README (Russian)](https://github.com/ebolblga/segmented-display-editor/blob/master/README.ru.md)
+- [GitHub repository](https://github.com/ebolblga/segmented-display-editor): Source, issues, contributors graph, and code.
+- [License (MIT)](https://github.com/ebolblga/segmented-display-editor/blob/master/LICENSE.md)
+- [Contributors graph](https://github.com/ebolblga/segmented-display-editor/graphs/contributors)
+- [Yal pixel font tool](https://yal.cc/tools/pixel-font/): External tool used to convert exported map/settings into font files.
+- [Node.js](https://nodejs.org/en/): Runtime used for development and running the app.
+
+## Optional
+- The README contains many inline example images (in `public/images/`) illustrating segment shapes and presets. These are optional for short contexts and can be skipped if a concise context is needed.
+- The project exports `yal-settings.json` and `character-map.png` which are sometimes large; include them only in a full context.

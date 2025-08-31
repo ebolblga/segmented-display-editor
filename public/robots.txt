@@ -1,2 +1,9 @@
-User-Agent: *
-Disallow:
+User-agent: *
+Allow: /
+
+# GitHub Pages hosted single-page application
+# All content is publicly accessible
+
+# AI/LLM Crawler Instructions
+# For detailed AI/LLM crawling instructions, see:
+# - /llms.txt (LLM-friendly documentation following llmstxt.org standard)
