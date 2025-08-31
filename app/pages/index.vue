@@ -359,8 +359,8 @@ async function exportYalSettings() {
                     '<- About this tool'
                 }}</NuxtLink>
                 <ThePresetSelector
-                    class="mt-3"
                     v-model="selectedPreset"
+                    class="mt-3"
                     @update:model-value="loadPreset" />
                 <div class="mb-2 flex items-center gap-2">
                     <BaseButton @click="clearAllSegments">

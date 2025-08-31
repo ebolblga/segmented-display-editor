@@ -67,6 +67,8 @@ Settings JSON is getting validated:
 - it checks that all number arrays are of same length as `numSegments` parameter
 - it checks that there are no similar rows - meaning no two characters have same truth table
 
+Colors get assigned automatically by evenly rotating hue in HSV color space and are purely visual.
+
 **Check table**
 This is a simple helper function. It is possible that your truth table contains segments that activate in identical patterns, meaning when one is activated, other one is activated too, same for deactivation. You can safely join those segments into single one and decrement segment count.
 
