@@ -59,7 +59,7 @@ On the main page you will see presets dropdown. This is a good place to start - 
 
 When you are done with number of segments, their dimensions and the character truth table you can start designing segments themselves.
 
-On the top of the page you can see `0...n` segments being displayed. You can draw on each segment with left mouse button and you can clear pixels using right mouse button. Changes will automatically appear on the map output for all the characters you added to the truth table.
+On the top of the page you can see `0...n` segments being displayed. You can draw on each segment with left mouse button (tap on phone) and you can clear pixels using right mouse button (hold on phone). Changes will automatically appear on the map output for all the characters you added to the truth table.
 
 Settings JSON is getting validated:
 
@@ -85,6 +85,10 @@ If you click "_Export Yal Settings_" button it will download `yal-settings.json`
 > I have no relation to the Yal website - if API changes or the site goes down, you will loose font generation feature.
 
 After clicking the button you will be redirected to the Yal website. Click "_Menu_" button and then "_Import settings_" and choose downloaded `yal-settings.json` file. Next click "_Pick image_" button and choose `character-map.png` file. Now you can edit some metadata and generate the font in TTF or OTF formats.
+
+**Misc**
+
+Favicon gets updated dynamically to display all your segments overlaid in additive blend mode.
 
 ## Examples
 

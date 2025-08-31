@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CanvasAPI, AppSettings, SettingsAPI } from '@types'
+import { useDebounceFn } from '@vueuse/core'
 
 useSeoMeta({
     title: 'Segmented Display Editor',
@@ -27,6 +28,7 @@ const appSettings = ref<AppSettings>({
 const settingsInputRef = ref<SettingsAPI | null>(null)
 const selectedPreset = ref<string>('/appSettings.json')
 const truthTableRef = computed(() => appSettings.value.truthTable)
+let currentFaviconUrl: string | null = null
 
 function handleSettingsUpdate(newSettings: AppSettings) {
     segmentCanvases.value = []
@@ -63,6 +65,8 @@ function clearAllSegments() {
 }
 
 function drawPreview() {
+    drawFavicon()
+
     if (!charMapCanvas.value) return
     const outCanvas = charMapCanvas.value
     const ctx = outCanvas.getContext('2d')
@@ -332,6 +336,114 @@ async function exportYalSettings() {
         link.click()
     }
 }
+
+function ensureFaviconLink(): HTMLLinkElement {
+    let link = document.querySelector<HTMLLinkElement>("link[rel~='icon']")
+    if (!link) {
+        link = document.createElement('link')
+        link.rel = 'icon'
+        document.head.appendChild(link)
+    }
+    return link
+}
+
+function compositeAndUpdateFavicon() {
+    const sources = (segmentCanvases.value ?? []).filter(Boolean) as CanvasAPI[]
+    if (sources.length === 0) return
+
+    const favW = 32
+    const favH = 32
+
+    // Output buffer (clamped)
+    const outBuf = new Uint8ClampedArray(favW * favH * 4)
+
+    for (let s = 0; s < sources.length; s++) {
+        const segImage = sources[s]?.getImageData()
+        if (!segImage) continue
+
+        const sw = segImage.width
+        const sh = segImage.height
+        const sdata = segImage.data
+
+        // Nearest-neighbour scaling + additive per-channel
+        for (let fy = 0; fy < favH; fy++) {
+            // Map once per row
+            const sy = Math.floor((fy * sh) / favH)
+            for (let fx = 0; fx < favW; fx++) {
+                const sx = Math.floor((fx * sw) / favW)
+
+                const sIdx = (sy * sw + sx) * 4
+                const alpha = sdata[sIdx + 3] // 0..255
+                if (alpha === 0) continue
+
+                const oIdx = (fy * favW + fx) * 4
+
+                // Additive RGB, clamped
+                // @ts-ignore
+                const r = outBuf[oIdx + 0] + sdata[sIdx + 0]
+                // @ts-ignore
+                const g = outBuf[oIdx + 1] + sdata[sIdx + 1]
+                // @ts-ignore
+                const b = outBuf[oIdx + 2] + sdata[sIdx + 2]
+
+                outBuf[oIdx + 0] = r > 255 ? 255 : r
+                outBuf[oIdx + 1] = g > 255 ? 255 : g
+                outBuf[oIdx + 2] = b > 255 ? 255 : b
+                outBuf[oIdx + 3] = 255 // Keep opaque when anything drawn
+            }
+        }
+    }
+
+    // Blit to off-DOM canvas
+    const canvas =
+        typeof document !== 'undefined'
+            ? (document.createElement('canvas') as HTMLCanvasElement)
+            : null
+    if (!canvas) return
+    canvas.width = favW
+    canvas.height = favH
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const imageData = new ImageData(outBuf, favW, favH)
+    ctx.putImageData(imageData, 0, 0)
+
+    // Update favicon (use toBlob + object URL)
+    if (canvas.toBlob) {
+        canvas.toBlob((blob) => {
+            if (!blob) return
+            revokePrevFavicon()
+            const url = URL.createObjectURL(blob)
+            const link = ensureFaviconLink()
+            link.href = url
+            currentFaviconUrl = url
+        }, 'image/png')
+    } else {
+        try {
+            const dataUrl = canvas.toDataURL('image/png')
+            revokePrevFavicon()
+            ensureFaviconLink().href = dataUrl
+            currentFaviconUrl = null
+        } catch {
+            // ignore
+        }
+    }
+}
+
+const drawFavicon = useDebounceFn(compositeAndUpdateFavicon, 1000)
+
+function revokePrevFavicon() {
+    if (currentFaviconUrl) {
+        try {
+            URL.revokeObjectURL(currentFaviconUrl)
+        } catch {}
+        currentFaviconUrl = null
+    }
+}
+
+onUnmounted(() => {
+    revokePrevFavicon()
+})
 </script>
 
 <template>
