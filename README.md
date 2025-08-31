@@ -25,6 +25,93 @@
 ## Problem Statement
 
 ## Conclusion
+<p align="center">
+  <img src="app\assets\4-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+<p align="center">
+  <img src="app\assets\4-seg-b.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+<p align="center">
+  <img src="app\assets\4-seg-c.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\4-seg-d.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\5-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\6-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\6-seg-b.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\6-seg-c.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\7-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+<p align="center">
+  <img src="app\assets\8-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\8-seg-b.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\8-seg-c.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\9-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\11-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\12-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\13-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\15-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
+<p align="center">
+  <img src="app\assets\18-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+
 
 ## Setup with [Node.js](https://nodejs.org/en/)
 ```bash
