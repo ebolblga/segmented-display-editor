@@ -3,6 +3,17 @@ import type { CanvasAPI, AppSettings, SettingsAPI } from '@types'
 
 useSeoMeta({
     title: 'Segmented Display Editor',
+    author: 'ebolblga',
+    robots: 'index, follow',
+})
+
+useHead({
+    link: [
+        {
+            rel: 'canonical',
+            href: 'https://segmented-display-editor.vercel.app/about',
+        },
+    ],
 })
 
 const segmentCanvases = ref<Array<CanvasAPI | null>>([])

@@ -87,7 +87,7 @@ After clicking the button you will be redirected to the Yal website. Click "_Men
 
 ## Examples
 
-You will see terms *disconnected* and *overlap* in the brackets next to segmented display names. Disconnected means that at least one of the segments has a disconnected piece (by [Chebyshev distance](https://en.wikipedia.org/wiki/Chebyshev_distance) of more than 1). Overlap means that segments overlap and may be impossible to wire in real life without physically adding another segment where two segments overlap.
+You will see terms _disconnected_ and _overlap_ in the brackets next to segmented display names. Disconnected means that at least one of the segments has a disconnected piece (by [Chebyshev distance](https://en.wikipedia.org/wiki/Chebyshev_distance) of more than 1). Overlap means that segments overlap and may be impossible to wire in real life without physically adding another segment where two segments overlap.
 
 **4 segment display A (disconnected)**
 

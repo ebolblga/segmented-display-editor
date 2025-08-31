@@ -5,6 +5,17 @@ import readmeRaw from '../README.md?raw'
 
 useSeoMeta({
     title: 'About Segmented Display Editor',
+    author: 'ebolblga',
+    robots: 'index, follow',
+})
+
+useHead({
+    link: [
+        {
+            rel: 'canonical',
+            href: 'https://segmented-display-editor.vercel.app/about',
+        },
+    ],
 })
 
 const md = markdownIt({
