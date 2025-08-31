@@ -1,0 +1,25 @@
+{
+    "baseUrl": "https://segmented-display-editor.vercel.app/",
+    "author": "Mogi Mogi",
+    "numSegments": 4,
+    "segmentWidth": 7,
+    "segmentHeight": 10,
+    "truthTable": {
+        "0": [1, 1, 1, 0],
+        "1": [0, 1, 0, 0],
+        "2": [0, 1, 1, 0],
+        "3": [1, 0, 1, 0],
+        "4": [0, 0, 0, 1],
+        "5": [0, 0, 1, 1],
+        "6": [0, 1, 1, 1],
+        "7": [1, 0, 0, 0],
+        "8": [1, 1, 1, 1],
+        "9": [1, 0, 1, 1]
+    },
+    "segmentImages": [
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAKCAYAAAB4zEQNAAAAOklEQVR4AZyNMRIAIAjDov//sxJGDgbtXRdC203owKmOMwkXrGqfEzLoHVppWZt0f4QC3SYF+g+6ewEAAP//rELYqAAAAAZJREFUAwDSLw4V+nDSxAAAAABJRU5ErkJggg==",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAKCAYAAAB4zEQNAAAAK0lEQVR4AcyPMQ4AAAwB1cv78zZ2OlfC4CyIQ+zByG7DLpQD6qhI/gnTnQUAAP//MSW5vQAAAAZJREFUAwCNWQYV8btT2gAAAABJRU5ErkJggg==",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAKCAYAAAB4zEQNAAAAIElEQVR4AeTJsQ0AAAyDMNT/f6Z7hjwQJCYfpS1UyYEHAAD//9nUJ6cAAAAGSURBVAMA3sYPBosw9swAAAAASUVORK5CYII=",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAKCAYAAAB4zEQNAAAAQUlEQVR4AZSNSQ4AIAjE0Jfzc7SHmagHoyQNgbL0uIRlRlVO1llLmhmtkcUm1VR+l/wUbHuTfwIBlhQn/5LzXBkAAAD//2v4b0QAAAAGSURBVAMAoGcPFVzUV+oAAAAASUVORK5CYII="
+    ]
+}

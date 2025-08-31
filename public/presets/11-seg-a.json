@@ -1,5 +1,6 @@
 {
     "baseUrl": "https://segmented-display-editor.vercel.app/",
+    "author": "ebolblga",
     "numSegments": 11,
     "segmentWidth": 3,
     "segmentHeight": 5,

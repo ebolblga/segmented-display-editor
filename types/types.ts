@@ -8,6 +8,7 @@ export interface CanvasAPI {
 
 export interface AppSettings {
     baseUrl?: string
+    author?: string
     numSegments: number
     segmentWidth: number
     segmentHeight: number
