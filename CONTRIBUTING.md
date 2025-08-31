@@ -109,4 +109,10 @@ yarn
 
 # Start the project in development mode
 yarn dev
+
+# Format with Prettier
+yarn format
+
+# Lint with ESlint
+yarn lint
 ```

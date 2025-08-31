@@ -87,6 +87,8 @@ After clicking the button you will be redirected to the Yal website. Click "_Men
 
 ## Examples
 
+You will see terms *disconnected* and *overlap* in the brackets next to segmented display names. Disconnected means that at least one of the segments has a disconnected piece (by [Chebyshev distance](https://en.wikipedia.org/wiki/Chebyshev_distance) of more than 1). Overlap means that segments overlap and may be impossible to wire in real life without physically adding another segment where two segments overlap.
+
 **4 segment display A (disconnected)**
 
 <p align="center">
@@ -183,7 +185,8 @@ _Author: Serjão_
   <img src="images/9-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
 </p>
 
-**10 segment display A (overlap)**
+**10 segment display A (overlap)**</br>
+If you have more segments than you have characters you may as well just assign each character it's own segment without any compromises.
 
 <p align="center">
   <img src="public/images/10-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;" onerror="this.style.display='none';">
@@ -248,6 +251,12 @@ yarn
 
 # Start the project in development mode
 yarn dev
+
+# Format with Prettier
+yarn format
+
+# Lint with ESlint
+yarn lint
 ```
 
 ## Contributors
