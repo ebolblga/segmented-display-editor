@@ -1,4 +1,7 @@
-# segmented-display-editor
+<div align="center">
+  <img src="public/images/logo.webp" alt="Segmented display editor logo" style="width:25%; image-rendering: pixelated;" onerror="this.style.display='none';">
+  <h1>Segmented Display Editor</h1>
+</div>
 
 ## A web application to make it easier to design segmented displays
 
@@ -17,8 +20,7 @@ This is a companion tool made for a project that will be published a bit later. 
 ## How to use
 
 <p align="center">
-  <img src="public/images/user-interface.webp" alt="img" style="width:100%;" onerror="this.style.display='none';">
-  <img src="images/user-interface.webp" alt="img" style="width:100%;">
+  <img src="public/images/user-interface.webp" alt="User interface" style="width:100%;" onerror="this.style.display='none';">
 </p>
 
 **Designing truth table**
