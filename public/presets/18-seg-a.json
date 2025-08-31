@@ -1,6 +1,4 @@
 {
-    "baseUrl": "https://segmented-display-editor.vercel.app/",
-    "author": "Posy",
     "numSegments": 18,
     "segmentWidth": 5,
     "segmentHeight": 7,
@@ -15,6 +13,11 @@
         "7": [1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0],
         "8": [0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0],
         "9": [0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0]
+    },
+    "baseUrl": "https://segmented-display-editor.vercel.app/",
+    "source": {
+        "author": "Posy",
+        "url": "https://www.michieldb.nl/other/segments/"
     },
     "segmentImages": [
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAYAAADAp4fuAAAAI0lEQVR4AbSIsQ0AAAiDsP//rB1cekAJC2jBEmjAEijqozEPAAD//x8f2O0AAAAGSURBVAMAJhACD42UR+8AAAAASUVORK5CYII=",

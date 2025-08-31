@@ -1,27 +1,19 @@
 <script setup lang="ts">
-const DISPLAY_HEIGHT = 128 // visual container height for each segment (px)
+import type { CanvasAPI } from '@types'
 
 const props = defineProps<{
   width: number
   height: number
-  color: [r: number, g: number, b: number, a: number]
+  color: [number, number, number, number]
 }>()
 
-// compute an integer scale so rendered pixels are sharp
-const scale = computed(() => {
-  // avoid 0 / negative
-  const h = Math.max(1, props.height)
-  return Math.max(1, Math.floor(DISPLAY_HEIGHT / h))
-})
-const cssWidth = computed(() => `${props.width * scale.value}px`)
-const cssHeight = computed(() => `${props.height * scale.value}px`)
+const emit = defineEmits<{
+  (e: 'update:imageData', data: ImageData): void
+}>()
 
-// --- canvas / drawing state (keeps same logic as before) ---
-// refs and contexts
 const visibleCanvas = ref<HTMLCanvasElement | null>(null)
 let visibleCtx: CanvasRenderingContext2D | null = null
 
-// offscreen canvas created in initCanvases (to avoid SSR issues)
 let offscreen: HTMLCanvasElement | null = null
 let offscreenCtx: CanvasRenderingContext2D | null = null
 let imageData: ImageData | null = null
@@ -30,37 +22,58 @@ const drawing = ref(false)
 const lastPoint = ref<{ x: number, y: number } | null>(null)
 const currentMode = ref<'draw' | 'erase' | null>(null)
 
+// Initialize canvases (client only)
 function initCanvases() {
-  // guard for SSR / server render — run only on client when visibleCanvas exists
   if (typeof window === 'undefined' || !visibleCanvas.value) return
 
+  // Create offscreen logical canvas
   offscreen = document.createElement('canvas')
-  offscreen.width = props.width
-  offscreen.height = props.height
+  offscreen.width = Math.max(1, Math.floor(props.width))
+  offscreen.height = Math.max(1, Math.floor(props.height))
   offscreenCtx = offscreen.getContext('2d')
-  if (!offscreenCtx) throw new Error('Could not get offscreen context')
+  if (!offscreenCtx) {
+    offscreen = null
+    offscreenCtx = null
+    return
+  }
 
-  imageData = offscreenCtx.createImageData(props.width, props.height)
+  // Image data buffer
+  imageData = offscreenCtx.createImageData(offscreen.width, offscreen.height)
   offscreenCtx.putImageData(imageData, 0, 0)
 
+  // Visible canvas context (logical coordinate system equals width/height attrs)
   visibleCtx = visibleCanvas.value.getContext('2d')
-  if (!visibleCtx) throw new Error('Could not get visible context')
-
-  // we only set CSS sizes; the logical resolution stays unchanged
+  if (!visibleCtx) {
+    visibleCtx = null
+    return
+  }
   visibleCtx.imageSmoothingEnabled = false
 
   redrawVisible()
 }
 
-onMounted(() => initCanvases())
+onMounted(() => {
+  // ensure DOM mounted so visibleCanvas ref exists
+  nextTick(() => initCanvases())
+})
+
 watch(
   () => props.width,
-  () => initCanvases(),
+  () => nextTick(initCanvases),
 )
+
 watch(
   () => props.height,
-  () => initCanvases(),
+  () => nextTick(initCanvases),
 )
+
+onBeforeUnmount(() => {
+  // Clean references
+  visibleCtx = null
+  offscreenCtx = null
+  offscreen = null
+  imageData = null
+})
 
 function clamp(v: number, a: number, b: number) {
   return Math.max(a, Math.min(b, v))
@@ -68,18 +81,19 @@ function clamp(v: number, a: number, b: number) {
 
 function setPixel(x: number, y: number) {
   if (!imageData) return
-  if (x < 0 || x >= props.width || y < 0 || y >= props.height) return
-  const i = (y * props.width + x) * 4
-  imageData.data[i] = props.color[0]
-  imageData.data[i + 1] = props.color[1]
-  imageData.data[i + 2] = props.color[2]
-  imageData.data[i + 3] = props.color[3]
+  if (x < 0 || x >= imageData.width || y < 0 || y >= imageData.height) return
+  const i = (y * imageData.width + x) * 4
+  const [r, g, b, a] = props.color
+  imageData.data[i] = r
+  imageData.data[i + 1] = g
+  imageData.data[i + 2] = b
+  imageData.data[i + 3] = a
 }
 
 function clearPixel(x: number, y: number) {
   if (!imageData) return
-  if (x < 0 || x >= props.width || y < 0 || y >= props.height) return
-  const i = (y * props.width + x) * 4
+  if (x < 0 || x >= imageData.width || y < 0 || y >= imageData.height) return
+  const i = (y * imageData.width + x) * 4
   imageData.data[i] = 0
   imageData.data[i + 1] = 0
   imageData.data[i + 2] = 0
@@ -89,10 +103,12 @@ function clearPixel(x: number, y: number) {
 function applyBrushAt(x: number, y: number) {
   setPixel(x, y)
 }
+
 function applyEraseAt(x: number, y: number) {
   clearPixel(x, y)
 }
 
+// Bresenham's line algorithm
 function drawLine(x0: number, y0: number, x1: number, y1: number) {
   const dx = Math.abs(x1 - x0)
   const sx = x0 < x1 ? 1 : -1
@@ -101,6 +117,7 @@ function drawLine(x0: number, y0: number, x1: number, y1: number) {
   let err = dx + dy
   let x = x0
   let y = y0
+
   while (true) {
     if (currentMode.value === 'erase') applyEraseAt(x, y)
     else applyBrushAt(x, y)
@@ -119,10 +136,15 @@ function drawLine(x0: number, y0: number, x1: number, y1: number) {
 
 function redrawVisible() {
   if (!visibleCtx || !offscreenCtx || !imageData || !offscreen) return
+  // Copy imageData to offscreen, then draw to visible (logical sizes)
   offscreenCtx.putImageData(imageData, 0, 0)
 
-  // clear visible and draw offscreen at logical size — CSS scales it for display
-  visibleCtx.clearRect(0, 0, props.width, props.height)
+  visibleCtx.clearRect(
+    0,
+    0,
+    visibleCanvas.value!.width,
+    visibleCanvas.value!.height,
+  )
   visibleCtx.imageSmoothingEnabled = false
   visibleCtx.drawImage(offscreen, 0, 0)
 }
@@ -130,16 +152,34 @@ function redrawVisible() {
 function getPointerPixelCoords(e: PointerEvent) {
   if (!visibleCanvas.value) return null
   const rect = visibleCanvas.value.getBoundingClientRect()
-  const x = Math.floor(((e.clientX - rect.left) / rect.width) * props.width)
-  const y = Math.floor(((e.clientY - rect.top) / rect.height) * props.height)
-  return { x: clamp(x, 0, props.width - 1), y: clamp(y, 0, props.height - 1) }
+  // Map client coords to logical canvas pixels using bounding rect
+  const x = Math.floor(
+    ((e.clientX - rect.left) / rect.width) * visibleCanvas.value.width,
+  )
+  const y = Math.floor(
+    ((e.clientY - rect.top) / rect.height) * visibleCanvas.value.height,
+  )
+  return {
+    x: clamp(x, 0, visibleCanvas.value.width - 1),
+    y: clamp(y, 0, visibleCanvas.value.height - 1),
+  }
 }
 
 function onPointerDown(e: PointerEvent) {
   e.preventDefault()
   if (!visibleCanvas.value) return
-  ;(e.target as Element).setPointerCapture(e.pointerId)
 
+  // Use the canvas element for pointer capture/release to be safer
+  try {
+    if (typeof visibleCanvas.value.setPointerCapture === 'function') {
+      visibleCanvas.value.setPointerCapture(e.pointerId)
+    }
+  }
+  catch {
+    // Ignore capture errors
+  }
+
+  // Right button (2) => erase, otherwise draw
   currentMode.value = e.button === 2 ? 'erase' : 'draw'
   drawing.value = true
 
@@ -173,51 +213,67 @@ function onPointerMove(e: PointerEvent) {
 function onPointerUp(e: PointerEvent) {
   if (!visibleCanvas.value) return
   try {
-    ;(e.target as Element).releasePointerCapture(e.pointerId)
+    if (typeof visibleCanvas.value.releasePointerCapture === 'function') {
+      visibleCanvas.value.releasePointerCapture(e.pointerId)
+    }
   }
-  catch {}
+  catch {
+    // Ignore
+  }
   drawing.value = false
   lastPoint.value = null
   currentMode.value = null
-  if (imageData) emitUpdateImage()
-}
-
-const emit = defineEmits<{
-  (e: 'update:imageData', data: ImageData): void
-}>()
-function emitUpdateImage() {
   if (imageData) emit('update:imageData', imageData)
 }
 
+// API
 function clearCanvas() {
   if (!imageData || !offscreenCtx || !offscreen) return
-  for (let i = 0; i < imageData.data.length; i++) imageData.data[i] = 0
+  // zero out the buffer
+  imageData.data.fill(0)
   offscreenCtx.clearRect(0, 0, offscreen.width, offscreen.height)
   offscreenCtx.putImageData(imageData, 0, 0)
   redrawVisible()
-  emitUpdateImage()
+  emit('update:imageData', imageData)
 }
 
-function exportPNG() {
-  const tmp = document.createElement('canvas')
-  tmp.width = props.width
-  tmp.height = props.height
-  const tctx = tmp.getContext('2d')!
-  if (imageData) tctx.putImageData(imageData, 0, 0)
-  tmp.toBlob((blob) => {
-    if (!blob) return
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'pixels.png'
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    URL.revokeObjectURL(url)
-  }, 'image/png')
+function loadFromDataURL(dataUrl: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (typeof window === 'undefined') {
+      return reject(new Error('Not available on server'))
+    }
+    // ensure canvases exist
+    initCanvases()
+    if (!offscreenCtx || !offscreen)
+      return reject(new Error('Canvas not initialized'))
+
+    const img = new Image()
+    img.onload = () => {
+      // draw into offscreen at logical size (stretch/fit to logical canvas size)
+      offscreenCtx!.clearRect(0, 0, offscreen!.width, offscreen!.height)
+      offscreenCtx!.drawImage(
+        img,
+        0,
+        0,
+        offscreen!.width,
+        offscreen!.height,
+      )
+      imageData = offscreenCtx!.getImageData(
+        0,
+        0,
+        offscreen!.width,
+        offscreen!.height,
+      )
+      offscreenCtx!.putImageData(imageData, 0, 0)
+      redrawVisible()
+      emit('update:imageData', imageData)
+      resolve()
+    }
+    img.onerror = () => reject(new Error('Failed to load image'))
+    img.src = dataUrl
+  })
 }
 
-// --- new: export to data URL (base64) ---
 function getDataURL(): string | null {
   if (!imageData) return null
   const tmp = document.createElement('canvas')
@@ -225,64 +281,27 @@ function getDataURL(): string | null {
   tmp.height = props.height
   const tctx = tmp.getContext('2d')!
   tctx.putImageData(imageData, 0, 0)
-  return tmp.toDataURL('image/png') // data:image/png;base64,...
+  return tmp.toDataURL('image/png')
 }
 
-// --- new: load from data URL (async) ---
-function loadFromDataURL(dataUrl: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (typeof window === 'undefined') {
-      return reject(new Error('Not available on server'))
-    }
-    initCanvases() // ensure offscreen/context exists
-    if (!offscreenCtx || !offscreen) {
-      return reject(new Error('Canvas not initialized'))
-    }
-
-    const img = new Image()
-    img.onload = () => {
-      // draw into offscreen at logical size (assume dataUrl matches logical size)
-      offscreenCtx!.clearRect(0, 0, offscreen!.width, offscreen!.height)
-      offscreenCtx!.drawImage(img, 0, 0, props.width, props.height)
-      // pull the pixels
-      imageData = offscreenCtx!.getImageData(
-        0,
-        0,
-        props.width,
-        props.height,
-      )
-      offscreenCtx!.putImageData(imageData, 0, 0)
-      redrawVisible()
-      emitUpdateImage()
-      resolve()
-    }
-    img.onerror = e => reject(new Error('Failed to load image'))
-    img.src = dataUrl
-  })
-}
-
-const publicApi = {
+const publicApi: CanvasAPI = {
   clear: clearCanvas,
-  exportPNG,
-  getImageData: () => imageData,
-  getDataURL,
   loadFromDataURL,
+  getDataURL,
+  getImageData: () => imageData,
 }
+
 defineExpose(publicApi)
 </script>
 
 <template>
-  <div
-    :class="['inline-block', $attrs.class]"
-    class="segment-wrapper"
-  >
-    <div class="flex h-[128px] items-center justify-center p-2">
+  <div :class="['inline-block', $attrs.class]">
+    <div class="flex items-center justify-center p-2">
       <canvas
         ref="visibleCanvas"
-        :width="props.width"
-        :height="props.height"
-        :style="{ width: cssWidth, height: cssHeight }"
-        class="block touch-none select-none bg-black"
+        :width="Math.max(1, props.width)"
+        :height="Math.max(1, props.height)"
+        class="block h-[128px] touch-none select-none bg-black [image-rendering:pixelated]"
         @pointerdown="onPointerDown"
         @pointermove="onPointerMove"
         @pointerup="onPointerUp"
@@ -293,12 +312,3 @@ defineExpose(publicApi)
     </div>
   </div>
 </template>
-
-<style scoped>
-canvas {
-    /* ensure crisp pixel scaling */
-    image-rendering: pixelated;
-    /* block-level sizes are set via inline style bindings (cssWidth/cssHeight) */
-    display: block;
-}
-</style>

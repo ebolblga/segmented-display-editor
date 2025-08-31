@@ -1,5 +1,4 @@
 {
-    "baseUrl": "https://segmented-display-editor.vercel.app/",
     "author": "Mogi Mogi",
     "numSegments": 4,
     "segmentWidth": 7,
@@ -15,6 +14,11 @@
         "7": [0, 1, 1, 0],
         "8": [1, 1, 1, 1],
         "9": [1, 1, 1, 0]
+    },
+    "baseUrl": "https://segmented-display-editor.vercel.app/",
+    "source": {
+        "author": "Mogi Mogi",
+        "url": "https://youtu.be/zUt0wHVSjjk?list=PLITa024Mibi46IUsciZofxQiEloQBM4Lw"
     },
     "segmentImages": [
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAICAYAAAA1BOUGAAAAOUlEQVR4AYRNQQoAMAiy/v/nlsN1cVAkhlZmAUXgU0ktgG5YXdNUCbvJTEIHQ9lh8TCqhv2tFo0OAAAA//9F/OWfAAAABklEQVQDAEOLCBFwysImAAAAAElFTkSuQmCC",

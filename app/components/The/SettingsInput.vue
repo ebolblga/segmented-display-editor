@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AppSettings } from '@types'
+import type { AppSettings, SettingsAPI } from '@types'
 import { useDebounceFn } from '@vueuse/core'
 
 const props = defineProps<{ storageKey?: string }>()
@@ -37,19 +37,10 @@ function validate(): boolean {
 
   const obj = raw as Partial<AppSettings>
   const out: AppSettings = {
-    baseUrl: '',
     numSegments: 0,
     segmentWidth: 0,
     segmentHeight: 0,
     truthTable: {},
-  }
-
-  // required fields
-  if (typeof obj.baseUrl !== 'string') {
-    errors.value.push('baseUrl must be a string.')
-  }
-  else {
-    out.baseUrl = obj.baseUrl
   }
 
   for (const key of [
@@ -65,7 +56,7 @@ function validate(): boolean {
     }
   }
 
-  // truthTable validation
+  // TruthTable validation
   if (
     obj.truthTable === undefined
     || typeof obj.truthTable !== 'object'
@@ -120,7 +111,7 @@ function validate(): boolean {
     out.truthTable = coerced
   }
 
-  // optional: segmentImages (array of base64 dataURLs)
+  // Optional: segmentImages (array of base64 dataURLs)
   if (obj.segmentImages !== undefined) {
     if (!Array.isArray(obj.segmentImages)) {
       errors.value.push('segmentImages must be an array of strings.')
@@ -138,10 +129,9 @@ function validate(): boolean {
           errors.value.push(`segmentImages[${i}] must be a string.`)
           break
         }
-        // optionally check data URL prefix; not strictly required
+        // Optionally check data URL prefix; not strictly required
         if (!s.startsWith('data:image')) {
-          // just warn — accept non-data URLs too, but ensure type is string
-          // if you want to enforce PNG only: check startsWith('data:image/png;base64,')
+          // Just warn — accept non-data URLs too, but ensure type is string
         }
         segs.push(s)
       }
@@ -186,29 +176,41 @@ onMounted(async () => {
     const saved = localStorage.getItem(props.storageKey)
     if (saved) {
       text.value = saved
-      validate()
+      save()
       return
     }
   }
 
   // nothing in localStorage → try to load /appSettings.json
+  loadFromJson('/appSettings.json')
+})
+
+async function loadFromJson(path: string) {
   try {
-    const res = await fetch('/appSettings.json')
+    const res = await fetch(path)
     if (res.ok) {
       const jsonText = await res.text()
       text.value = jsonText
-      validate()
+      save()
     }
     else {
-      console.warn('Failed to load /appSettings.json:', res.status)
+      console.warn(`Failed to load ${path}:`, res.status)
     }
   }
   catch (err) {
-    console.error('Error loading /appSettings.json:', err)
+    console.error(`Error loading ${path}:`, err)
   }
-})
+}
 
-defineExpose({ validate, save, clearInput, errors, text, parsed })
+defineExpose({
+  validate,
+  save,
+  clearInput,
+  loadFromJson,
+  errors,
+  text,
+  parsed,
+} as SettingsAPI)
 </script>
 
 <template>
@@ -223,21 +225,21 @@ defineExpose({ validate, save, clearInput, errors, text, parsed })
     />
     <div class="mt-2 flex gap-2">
       <BaseButton @click="save">
-        Save
+        Reload
       </BaseButton>
       <BaseButton @click="clearInput">
         Clear
       </BaseButton>
-      <div
-        v-if="isValid"
-        class="text-green-700 ml-auto text-sm"
-      >
-        Valid
-      </div>
+    </div>
+    <div
+      v-if="isValid"
+      class="mt-3 text-sm text-accent"
+    >
+      Valid
     </div>
     <div
       v-if="errors.length"
-      class="text-red-600 mt-3 text-sm"
+      class="mt-3 text-sm text-accent"
     >
       <div class="font-medium">
         Errors:

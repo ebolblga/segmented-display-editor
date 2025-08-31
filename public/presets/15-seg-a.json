@@ -1,5 +1,4 @@
 {
-    "baseUrl": "https://segmented-display-editor.vercel.app/",
     "numSegments": 15,
     "segmentWidth": 9,
     "segmentHeight": 11,
@@ -15,6 +14,7 @@
         "8": [1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1],
         "9": [1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0]
     },
+    "baseUrl": "https://segmented-display-editor.vercel.app/",
     "segmentImages": [
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAALCAYAAACtWacbAAAAMElEQVR4AeyQMQoAAAgCr/7/54qgIWroAYkOyk0qIQOrRB1OSEAqLEpo2dv0EKcLHAAA//9fumUaAAAABklEQVQDAF9UBhebMNC3AAAAAElFTkSuQmCC",
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAALCAYAAACtWacbAAAAMUlEQVR4AeyMwQkAAAgCrUkbrU0LH0EP2yDhQPDQIVKBGjhLyRI2nBKHjXzaAvtLaAAAAP//HF66jgAAAAZJREFUAwAxMAkXiI8vtAAAAABJRU5ErkJggg==",

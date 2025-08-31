@@ -1,6 +1,4 @@
 {
-    "baseUrl": "https://segmented-display-editor.vercel.app/",
-    "author": "Yenji Jem",
     "numSegments": 6,
     "segmentWidth": 4,
     "segmentHeight": 8,
@@ -15,6 +13,11 @@
         "7": [1, 0, 1, 0, 1, 0],
         "8": [1, 1, 1, 1, 1, 1],
         "9": [1, 1, 1, 0, 1, 1]
+    },
+    "baseUrl": "https://segmented-display-editor.vercel.app/",
+    "source": {
+        "author": "Yenji Jem",
+        "url": "https://youtu.be/B887D3PVYqs"
     },
     "segmentImages": [
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAAIUlEQVR4AbTIsQ0AAAzCsMD/P9MVdSeSlziQZoGaeU3GAQAA//8eCMPGAAAABklEQVQDAAEECBGrvg4tAAAAAElFTkSuQmCC",

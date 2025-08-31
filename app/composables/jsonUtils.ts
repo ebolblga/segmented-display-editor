@@ -1,4 +1,6 @@
-export function stringifyCompactArrays(obj: any, space = 2): string {
+import type { TruthTable } from '@types'
+
+export function stringifyCompactArrays(obj: any, space: number = 2): string {
   return (
     JSON.stringify(obj, (key, value) => value, space)
     // collapse simple number/boolean/string arrays
@@ -11,8 +13,6 @@ export function stringifyCompactArrays(obj: any, space = 2): string {
   )
 }
 
-type TruthTable = Record<string, number[]>
-
 export function findExactGroups(truthTable: TruthTable): number[][] {
   const labels = Object.keys(truthTable)
   if (labels.length === 0) {
@@ -23,14 +23,14 @@ export function findExactGroups(truthTable: TruthTable): number[][] {
   if (!firstRow) return []
   const m = firstRow.length
 
-  // collect the column vector for each segment
+  // Collect the column vector for each segment
   const patterns: string[] = []
   for (let s = 0; s < m; s++) {
     const pattern = labels.map(label => truthTable[label]![s]).join(',')
     patterns.push(pattern)
   }
 
-  // group segments with identical patterns
+  // Group segments with identical patterns
   const groups: number[][] = []
   const seen: boolean[] = Array(m).fill(false)
 

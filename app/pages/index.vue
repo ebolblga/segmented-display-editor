@@ -1,20 +1,31 @@
 <script setup lang="ts">
-import type { CanvasAPI, AppSettings } from '@types'
+import {
+  type CanvasAPI,
+  type AppSettings,
+  type SettingsAPI,
+  presets,
+} from '@types'
 
 const segmentCanvases = ref<Array<CanvasAPI | null>>([])
 const charMapCanvas = ref<HTMLCanvasElement | null>(null)
 const appSettings = ref<AppSettings>({
-  baseUrl: '',
-  numSegments: 4,
-  segmentWidth: 5,
-  segmentHeight: 9,
+  numSegments: 0,
+  segmentWidth: 0,
+  segmentHeight: 0,
   truthTable: {},
 } as AppSettings)
-const settingsInputRef = ref<any>(null)
+const settingsInputRef = ref<SettingsAPI | null>(null)
+const selectedPreset = ref<string>('/appSettings.json')
+const truthTableRef = computed(() => appSettings.value.truthTable)
 
 function handleSettingsUpdate(newSettings: AppSettings) {
   segmentCanvases.value = []
   appSettings.value = newSettings
+}
+
+function loadPreset(path: string) {
+  if (!path) return
+  settingsInputRef.value?.loadFromJson(path)
 }
 
 async function setSegmentCanvas(el: unknown, idx: number) {
@@ -39,18 +50,6 @@ async function setSegmentCanvas(el: unknown, idx: number) {
 function clearAllSegments() {
   segmentCanvases.value.forEach(r => r?.clear())
 }
-
-function exportAllSegments() {
-  segmentCanvases.value.forEach(r => r?.exportPNG())
-}
-
-function logAllSegmentData() {
-  segmentCanvases.value.forEach((r, idx) => {
-    console.log('segment', idx, r?.getImageData())
-  })
-}
-
-const truthTableRef = computed(() => appSettings.value.truthTable)
 
 function drawPreview() {
   if (!charMapCanvas.value) return
@@ -201,7 +200,6 @@ function drawPreview() {
   drawLine(2 * (segmentHeight + padding * 2), 'screen')
 }
 
-// --- new: Save current settings + canvases into localStorage / settings input ---
 async function saveSettingsIncludingCanvases() {
   // validate current JSON in TheSettingsInput
   if (!settingsInputRef?.value) {
@@ -253,14 +251,30 @@ async function saveSettingsIncludingCanvases() {
     localStorage.setItem('app:settings', jsonText)
   }
 
+  exportJson(jsonText)
+
   // also apply to appSettings in-memory so newly added images are recognized
   appSettings.value = baseSettings
   // redraw preview (canvases already loaded)
   drawPreview()
 }
 
+function exportJson(json: string): void {
+  const blob = new Blob([json], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'app-settings.json'
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 function checkTable() {
-  console.log(findExactGroups(truthTableRef.value))
+  const list: number[][] = findExactGroups(truthTableRef.value)
+
+  if (list.length > 0) {
+    alert(`segments with identical patterns: ${JSON.stringify(list)}}`)
+  }
 }
 </script>
 
@@ -287,40 +301,32 @@ function checkTable() {
   </ClientOnly>
   <div class="flex h-[80vh] w-full flex-row">
     <div class="h-full w-[25vw] p-4">
+      <ThePresetSelector
+        v-model="selectedPreset"
+        @update:model-value="loadPreset"
+      />
+      <div class="mb-2 flex items-center gap-2">
+        <BaseButton @click="clearAllSegments">
+          Clear All Segments
+        </BaseButton>
+        <BaseButton @click="saveSettingsIncludingCanvases">
+          Export Settings
+        </BaseButton>
+        <BaseButton @click="checkTable">
+          Check Table
+        </BaseButton>
+      </div>
       <TheSettingsInput
         ref="settingsInputRef"
         storage-key="app:settings"
         @update:settings="handleSettingsUpdate"
       />
-      <div class="mt-2 flex items-center gap-2">
-        <BaseButton @click="clearAllSegments">
-          Clear All Segments
-        </BaseButton>
-        <!-- <BaseButton @click="exportAllSegments">
-                    Export All Segments
-                </BaseButton> -->
-        <!-- <BaseButton @click="logAllSegmentData">
-                    Log ImageData
-                </BaseButton> -->
-        <BaseButton @click="saveSettingsIncludingCanvases">
-          Export Settings
-        </BaseButton>
-        <BaseButton @click="checkTable">
-          Check table
-        </BaseButton>
-      </div>
     </div>
     <div class="flex h-full w-[75vw] justify-center p-4">
       <canvas
         ref="charMapCanvas"
-        class="my-auto w-full bg-black"
+        class="my-auto w-full bg-black [image-rendering:pixelated]"
       />
     </div>
   </div>
 </template>
-
-<style scoped>
-canvas {
-    image-rendering: pixelated;
-}
-</style>

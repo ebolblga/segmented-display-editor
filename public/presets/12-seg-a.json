@@ -1,6 +1,4 @@
 {
-    "baseUrl": "https://segmented-display-editor.vercel.app/",
-    "author": "ebolblga",
     "numSegments": 12,
     "segmentWidth": 3,
     "segmentHeight": 4,
@@ -15,6 +13,11 @@
         "7": [1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0],
         "8": [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1],
         "9": [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1]
+    },
+    "baseUrl": "https://segmented-display-editor.vercel.app/",
+    "source": {
+        "author": "ebolblga",
+        "url": "https://github.com/ebolblga/segmented-display-editor"
     },
     "segmentImages": [
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAECAYAAABLLYUHAAAAIUlEQVR4AVSHQQoAAAiDbP//c43RZSKCWrAEDViC0k/NAQAA///LfwKKAAAABklEQVQDAGQeAglfdF9mAAAAAElFTkSuQmCC",
