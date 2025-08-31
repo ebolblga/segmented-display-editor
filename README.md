@@ -1,6 +1,6 @@
 # segmented-display-editor
 
-## A web application to make it easier to make segmented displays
+## A web application to make it easier to design segmented displays
 
 [![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/ebolblga/segmented-display-editor/blob/master/README.md)
 [![ru](https://img.shields.io/badge/lang-ru-red.svg)](https://github.com/ebolblga/segmented-display-editor/blob/master/README.ru.md)
@@ -9,25 +9,70 @@
 <!-- DeepWiki badge here: https://deepwiki.ryoppippi.com/ -->
 
 ## Introduction
+This is a companion tool made for a project that will be published a bit later. It's goal was to design 4 segment display using ML. Early in the development I ran into a problem of trying out the design in action or modifying it, thus this tool was made to make my life easier.
 
 > [!NOTE]
-> Useful information that users should know, even when skimming content.
+> Contributions to this repository are welcome, you are free to improve the tool or add new segmented display presets. More about how to contribute on the [development guide](https://github.com/ebolblga/segmented-display-editor?tab=contributing-ov-file) page.
+
+## How to use
+
+<p align="center">
+  <img src="public/images/user-interface.webp" alt="img" style="width:100%;" onerror="this.style.display='none';">
+  <img src="images/user-interface.webp" alt="img" style="width:100%;">
+</p>
+
+**Designing truth table**
+
+On the main page you will see presets dropdown. This is a good place to start - each preset loads JSON file with app settings. This presets file includes number of segments, segment dimensions in pixels as well as truth table: any character to number array mapping. Character can be any Unicode string and array of numbers should always be same length as the number of segments. `1` on `index n` means segment n is activated for that character and `0` means it is deactivated.
+
+```json
+{
+    "numSegments": 4,
+    "segmentWidth": 7,
+    "segmentHeight": 10,
+    "truthTable": {
+        "0": [1, 1, 1, 0],
+        "1": [0, 1, 0, 0],
+        "2": [0, 0, 1, 0],
+        "3": [1, 0, 1, 0],
+        "4": [0, 0, 0, 1],
+        "5": [0, 0, 1, 1],
+        "6": [0, 1, 1, 1],
+        "7": [1, 0, 0, 0],
+        "8": [1, 1, 1, 1],
+        "9": [1, 0, 1, 1]
+    },
+    "baseUrl": "<this project's website>",
+    "source": {
+        "author": "<author name>",
+        "url": "<source url>"
+    }
+}
+```
 
 > [!TIP]
-> Helpful advice for doing things better or more easily.
+> You are free to modify the settings JSON right on the website, but for more flexibility I recommend using VSCode or Vim/Emacs - way easier to edit arrays of numbers there.
 
-> [!IMPORTANT]
-> Key information users need to know to achieve their goal.
+**Designing segments**
 
-> [!WARNING]
-> Urgent info that needs immediate user attention to avoid problems.
+When you are done with number of segments, their dimensions and the character truth table you can start designing segments themselves.
 
-> [!CAUTION]
-> Advises about risks or negative outcomes of certain actions.
+On the top of the page you can see `0...n` segments being displayed. You can draw on each segment with left mouse button and you can clear pixels using right mouse button. Changes will automatically appear on the map output for all the characters you added to the truth table.
 
-## Problem Statement
+Settings JSON is getting validated:
+- it checks that all number arrays are of same length as `numSegments` parameter
+- it checks that there are no similar rows - meaning no two characters have same truth table
 
-## Conclusion
+**Check table**
+This is a simple helper function. It is possible that your truth table contains segments that activate in identical patterns, meaning when one is activated, other one is activated too, same for deactivation. You can safely join those segments into single one and decrement segment count.
+
+**Exporting**
+
+You can export settings via "*Export settings*" button, that will download JSON file with all the data including your segments encoded as base64 strings. If you'd like to import your saved settings back you can just paste in JSON file contents into app settings text area.
+
+As for segments and map as image files, just right click on them and click "*Save as..*"
+
+## Examples
 
 **4 segment display A (disconnected)**
 
