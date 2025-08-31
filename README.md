@@ -1,4 +1,4 @@
-b# segmented-display-editor
+# segmented-display-editor
 ## A web application to make it easier to make segmented displays
 
 [![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/ebolblga/segmented-display-editor/blob/master/README.md)
