@@ -4,21 +4,21 @@
     "segmentWidth": 5,
     "segmentHeight": 9,
     "truthTable": {
-        "0": [1, 0, 1, 1],
-        "1": [0, 0, 0, 1],
-        "2": [0, 0, 1, 0],
-        "3": [1, 0, 1, 0],
-        "4": [0, 1, 0, 0],
-        "5": [0, 1, 1, 0],
+        "0": [1, 1, 1, 0],
+        "1": [0, 0, 1, 0],
+        "2": [0, 1, 0, 0],
+        "3": [1, 1, 0, 0],
+        "4": [0, 0, 0, 1],
+        "5": [0, 1, 0, 1],
         "6": [0, 1, 1, 1],
         "7": [1, 0, 0, 0],
         "8": [1, 1, 1, 1],
-        "9": [1, 1, 1, 0]
+        "9": [1, 1, 0, 1]
     },
     "segmentImages": [
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAJCAYAAAD6reaeAAAANklEQVR4AYyMMQ4AMAgCz/7/z1ZMGOxSSRg8hEMpIe06aRgQtsKGPPpDVTUzPgUUDOjpHdTEBQAA//+CFZxqAAAABklEQVQDAJjVDBNt31ssAAAAAElFTkSuQmCC",
-        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAJCAYAAAD6reaeAAAAN0lEQVR4AYyNwQkAMAgDNZO7ue0J/QQfFSJ4CVGxjKqjne9JT3GrMpKKp4GsMTDR/SGg6w9SdQAAAP//TKDwyQAAAAZJREFUAwCycA8TVs7YPgAAAABJRU5ErkJggg==",
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAJCAYAAAD6reaeAAAAMklEQVR4AbSOwQ0AMAgCj+6/s8UQGxeokYgXHhx6qoqR/0BJSNGDNnuT3MT+H5yOfYELAAD//9f7gKkAAAAGSURBVAMAo2ISCjrOWwYAAAAASUVORK5CYII=",
-        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAJCAYAAAD6reaeAAAAKklEQVR4AayMMQoAAAgCzZf786ItxDHBwROOCKHQ7ZwOdmcoVO17S/07BwAA//9kkSRnAAAABklEQVQDAKxBBhMSY8x8AAAAAElFTkSuQmCC"
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAJCAYAAAD6reaeAAAAKklEQVR4AayMMQoAAAgCzZf786ItxDHBwROOCKHQ7ZwOdmcoVO17S/07BwAA//9kkSRnAAAABklEQVQDAKxBBhMSY8x8AAAAAElFTkSuQmCC",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAJCAYAAAD6reaeAAAAN0lEQVR4AYyNwQkAMAgDNZO7ue0J/QQfFSJ4CVGxjKqjne9JT3GrMpKKp4GsMTDR/SGg6w9SdQAAAP//TKDwyQAAAAZJREFUAwCycA8TVs7YPgAAAABJRU5ErkJggg=="
     ]
 }

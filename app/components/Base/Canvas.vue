@@ -215,10 +215,56 @@ function exportPNG() {
     }, 'image/png')
 }
 
+// --- new: export to data URL (base64) ---
+function getDataURL(): string | null {
+    if (!imageData) return null
+    const tmp = document.createElement('canvas')
+    tmp.width = props.width
+    tmp.height = props.height
+    const tctx = tmp.getContext('2d')!
+    tctx.putImageData(imageData, 0, 0)
+    return tmp.toDataURL('image/png') // data:image/png;base64,...
+}
+
+// --- new: load from data URL (async) ---
+function loadFromDataURL(dataUrl: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (typeof window === 'undefined') {
+            return reject(new Error('Not available on server'))
+        }
+        initCanvases() // ensure offscreen/context exists
+        if (!offscreenCtx || !offscreen) {
+            return reject(new Error('Canvas not initialized'))
+        }
+
+        const img = new Image()
+        img.onload = () => {
+            // draw into offscreen at logical size (assume dataUrl matches logical size)
+            offscreenCtx!.clearRect(0, 0, offscreen!.width, offscreen!.height)
+            offscreenCtx!.drawImage(img, 0, 0, props.width, props.height)
+            // pull the pixels
+            imageData = offscreenCtx!.getImageData(
+                0,
+                0,
+                props.width,
+                props.height
+            )
+            offscreenCtx!.putImageData(imageData, 0, 0)
+            redrawVisible()
+            emitUpdateImage()
+            resolve()
+        }
+        img.onerror = (e) => reject(new Error('Failed to load image'))
+        img.src = dataUrl
+    })
+}
+
 const publicApi = {
     clear: clearCanvas,
     exportPNG,
     getImageData: () => imageData,
+    getDataURL,
+    loadFromDataURL,
 }
 defineExpose(publicApi)
 </script>

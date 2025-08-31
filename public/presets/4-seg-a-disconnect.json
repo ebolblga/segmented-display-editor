@@ -1,0 +1,24 @@
+{
+    "baseUrl": "https://segmented-display-editor.vercel.app/",
+    "numSegments": 4,
+    "segmentWidth": 7,
+    "segmentHeight": 10,
+    "truthTable": {
+        "0": [1, 1, 1, 0],
+        "1": [0, 1, 0, 0],
+        "2": [0, 0, 1, 0],
+        "3": [1, 0, 1, 0],
+        "4": [0, 0, 0, 1],
+        "5": [0, 0, 1, 1],
+        "6": [0, 1, 1, 1],
+        "7": [1, 0, 0, 0],
+        "8": [1, 1, 1, 1],
+        "9": [1, 0, 1, 1]
+    },
+    "segmentImages": [
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAKCAYAAAB4zEQNAAAAOklEQVR4AZyNMRIAIAjDov//sxJGDgbtXRdC203owKmOMwkXrGqfEzLoHVppWZt0f4QC3SYF+g+6ewEAAP//rELYqAAAAAZJREFUAwDSLw4V+nDSxAAAAABJRU5ErkJggg==",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAKCAYAAAB4zEQNAAAAKUlEQVR4AdTOIQ4AAAgCQOTl/hxHF7tsFK5AHGFDSs4E3p9ho8q3tw4AAAD//5DAuVoAAAAGSURBVAMAnuYDFQBi5sMAAAAASUVORK5CYII=",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAKCAYAAAB4zEQNAAAAN0lEQVR4AcSPUQoAMAhCdfe/s3MIg0Xst0goH3648JlASahyKJAkyFcX+ug2yY7Ym4O14/kBbAAAAP//OGWVPgAAAAZJREFUAwBH9B4GP05KDAAAAABJRU5ErkJggg==",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAKCAYAAAB4zEQNAAAAOUlEQVR4AZSNQQoAMAjDdC/3545cigyZKPSgIfXYZ2YYadkVzGZncZNJdY1guHkNgMhkebOHvKDlAgAA//8GqceGAAAABklEQVQDABkSDxVulPxBAAAAAElFTkSuQmCC"
+    ]
+}

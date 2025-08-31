@@ -1,0 +1,26 @@
+{
+    "baseUrl": "https://segmented-display-editor.vercel.app/",
+    "numSegments": 6,
+    "segmentWidth": 4,
+    "segmentHeight": 8,
+    "truthTable": {
+        "0": [0, 0, 0, 1, 1, 1],
+        "1": [0, 1, 0, 1, 0, 0],
+        "2": [1, 0, 1, 1, 0, 1],
+        "3": [1, 0, 1, 0, 1, 1],
+        "4": [0, 1, 1, 0, 1, 0],
+        "5": [1, 1, 0, 0, 1, 1],
+        "6": [1, 1, 0, 1, 1, 1],
+        "7": [1, 0, 1, 0, 1, 0],
+        "8": [1, 1, 1, 1, 1, 1],
+        "9": [1, 1, 1, 0, 1, 1]
+    },
+    "segmentImages": [
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAAIUlEQVR4AbTIsQ0AAAzCsMD/P9MVdSeSlziQZoGaeU3GAQAA//8eCMPGAAAABklEQVQDAAEECBGrvg4tAAAAAElFTkSuQmCC",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAAKklEQVR4AYxLyQkAAAhS99/Z6CFEfRJE8RAWZMMzu4vZthcJtgkfl0yjBQAA//9pIiQZAAAABklEQVQDAGLGAxHz8s0lAAAAAElFTkSuQmCC",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAALElEQVR4AYTKSQ4AAAQDwPL/P1MRkrrYLtM6zigEQoHtBiaoXzDsdoPJ3A8JAAD//4uvjJ0AAAAGSURBVAMABMQGEZNMRdEAAAAASUVORK5CYII=",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAAIklEQVR4AZyMMQoAAAiEsv//2dajKXIUtGvxEmpuLg8gkwEAAP//l9KgNAAAAAZJREFUAwDHtwMR3HQmdQAAAABJRU5ErkJggg==",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAAKElEQVR4AZyMMQoAAAiEvP7/5yKKhhsTXBwMjH/IhHEfErSwgcOCVAAAAP//fP8kCQAAAAZJREFUAwBXtQYRH8fn+gAAAABJRU5ErkJggg==",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAAHklEQVR4AbzIsQkAAADCMPH/n+sqHmChS6zpBAj6AAAA//97pA9pAAAABklEQVQDAGjsDAU01ybFAAAAAElFTkSuQmCC"
+    ]
+}

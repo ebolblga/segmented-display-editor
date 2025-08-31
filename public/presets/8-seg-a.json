@@ -1,0 +1,28 @@
+{
+    "baseUrl": "https://segmented-display-editor.vercel.app/",
+    "numSegments": 8,
+    "segmentWidth": 6,
+    "segmentHeight": 6,
+    "truthTable": {
+        "0": [1, 1, 0, 0, 1, 0, 0, 1],
+        "1": [0, 0, 0, 1, 1, 0, 0, 0],
+        "2": [1, 0, 0, 1, 0, 1, 0, 1],
+        "3": [1, 0, 0, 1, 0, 0, 1, 1],
+        "4": [0, 0, 1, 1, 0, 1, 0, 0],
+        "5": [1, 0, 1, 0, 0, 0, 1, 1],
+        "6": [0, 0, 0, 1, 0, 1, 1, 1],
+        "7": [1, 0, 0, 1, 0, 1, 0, 0],
+        "8": [1, 0, 1, 1, 0, 1, 1, 1],
+        "9": [1, 0, 1, 1, 0, 1, 0, 0]
+    },
+    "segmentImages": [
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAJklEQVR4AayJgQkAAAjCVv//bAjiBQlDxpZMIBOlYWAMWUO89xgOAAD//yuWU08AAAAGSURBVAMAKmoEDSZw03sAAAAASUVORK5CYII=",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAKUlEQVR4AXSLsQ0AAAjC0M+83NMwrAZIWKBthDQXdF82HK0tGzUoEb8HAAD//7dFcPEAAAAGSURBVAMAWpMDDbgbrX8AAAAASUVORK5CYII=",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAALklEQVR4AXTKSQoAAAgCQOvl/bwVOwQFITgqnmswh18fEMjFhlpbYiV/gQXzhQAAAP//PPpjnwAAAAZJREFUAwBcagYNWhJOuQAAAABJRU5ErkJggg==",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAL0lEQVR4AXSMwQkAAAgCs8kavc0KqU9IQQh3ottzKiqK3SsIkVCBgSpI9u/UQkYDAAD//3oGiLUAAAAGSURBVAMAG+oGDb3kNb0AAAAASUVORK5CYII=",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAIklEQVR4AazMsQ0AAAiEQHH/ndEB3k7aS+g6yqBm2MsXAAMAAP//moOeyQAAAAZJREFUAwA1kwMN215KKgAAAABJRU5ErkJggg==",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAKklEQVR4AaSMwQ0AAAQDMZnRbVZpfIR46fOuOZNjH+FAr1aKMFS3GJCHBAAA//8M0gx7AAAABklEQVQDAB/bBg0XLy1NAAAAAElFTkSuQmCC",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAK0lEQVR4AaTMIQ4AAAgCQPTl/FzHpoFgkkI4RuLIE4iqfbYrIoKDBloL1Q0AAP//+WNTHwAAAAZJREFUAwD+TAYNgbClZQAAAABJRU5ErkJggg==",
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAI0lEQVR4AbyOoQ0AAAzCyP7/aadBEEgsTapqeihMA/G0eREAAAD///ffJHYAAAAGSURBVAMASGYFh6ozTugAAAAASUVORK5CYII="
+    ]
+}

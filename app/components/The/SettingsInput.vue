@@ -114,6 +114,36 @@ function validate(): boolean {
         out.truthTable = coerced
     }
 
+    // optional: segmentImages (array of base64 dataURLs)
+    if (obj.segmentImages !== undefined) {
+        if (!Array.isArray(obj.segmentImages)) {
+            errors.value.push('segmentImages must be an array of strings.')
+        } else if (obj.segmentImages.length !== out.numSegments) {
+            errors.value.push(
+                `segmentImages must have length ${out.numSegments}.`
+            )
+        } else {
+            const segs: string[] = []
+            for (let i = 0; i < obj.segmentImages.length; i++) {
+                const s = obj.segmentImages[i]
+                if (typeof s !== 'string') {
+                    errors.value.push(`segmentImages[${i}] must be a string.`)
+                    break
+                }
+                // optionally check data URL prefix; not strictly required
+                if (!s.startsWith('data:image')) {
+                    // just warn — accept non-data URLs too, but ensure type is string
+                    // if you want to enforce PNG only: check startsWith('data:image/png;base64,')
+                }
+                segs.push(s)
+            }
+            if (segs.length === out.numSegments) {
+                // @ts-ignore allow optional property on AppSettings
+                out.segmentImages = segs
+            }
+        }
+    }
+
     if (errors.value.length === 0) {
         parsed.value = out
         return true
@@ -178,18 +208,14 @@ defineExpose({ validate, save, clearInput, errors, text, parsed })
             rows="18"
             class="w-full p-2 border-2 rounded-lg border-secondary resize-y text-xs font-mono bg-background"
             @input="debouncedSave"
-            placeholder='{...}' />
-
+            placeholder="{...}" />
         <div class="mt-2 flex gap-2">
             <BaseButton @click="save"> Save </BaseButton>
-
             <BaseButton @click="clearInput"> Clear </BaseButton>
-
             <div v-if="isValid" class="ml-auto text-sm text-green-700">
                 Valid
             </div>
         </div>
-
         <div v-if="errors.length" class="mt-3 text-sm text-red-600">
             <div class="font-medium">Errors:</div>
             <ul class="list-disc ml-5">

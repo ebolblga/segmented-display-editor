@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CanvasAPI, AppSettings, OverlayMode } from '@types'
+import type { CanvasAPI, AppSettings } from '@types'
 
 const segmentCanvases = ref<Array<CanvasAPI | null>>([])
 const charMapCanvas = ref<HTMLCanvasElement | null>(null)
@@ -10,14 +10,28 @@ const appSettings = ref<AppSettings>({
     segmentHeight: 9,
     truthTable: {},
 } as AppSettings)
+const settingsInputRef = ref<any>(null)
 
 function handleSettingsUpdate(newSettings: AppSettings) {
     segmentCanvases.value = []
     appSettings.value = newSettings
 }
 
-function setSegmentCanvas(el: unknown, idx: number) {
+async function setSegmentCanvas(el: unknown, idx: number) {
     segmentCanvases.value[idx] = (el as CanvasAPI) ?? null
+
+    // If the settings JSON contained a segmentImages array, try to load it into the freshly mounted canvas
+    try {
+        const s = appSettings.value && (appSettings.value as any).segmentImages
+        if (s && Array.isArray(s) && s[idx]) {
+            // load image into canvas (async)
+            await segmentCanvases.value[idx]!.loadFromDataURL(s[idx])
+        }
+    } catch (err) {
+        // ignore load failure, but still continue
+        console.warn('Failed to load segment image', idx, err)
+    }
+
     drawPreview()
 }
 
@@ -35,24 +49,15 @@ function logAllSegmentData() {
     })
 }
 
+const truthTableRef = computed(() => appSettings.value.truthTable)
+
 function drawPreview() {
     if (!charMapCanvas.value) return
     const outCanvas = charMapCanvas.value
     const ctx = outCanvas.getContext('2d')
     if (!ctx) return
 
-    const truthTable: Record<string, number[]> = {
-        '0': [1, 0, 1, 1],
-        '1': [0, 0, 0, 1],
-        '2': [0, 0, 1, 0],
-        '3': [1, 0, 1, 0],
-        '4': [0, 1, 0, 0],
-        '5': [0, 1, 1, 0],
-        '6': [0, 1, 1, 1],
-        '7': [1, 0, 0, 0],
-        '8': [1, 1, 1, 1],
-        '9': [1, 1, 1, 0],
-    }
+    const truthTable: Record<string, number[]> = truthTableRef.value
 
     const keys = Object.keys(truthTable)
     const numChars = keys.length
@@ -61,7 +66,7 @@ function drawPreview() {
     const segmentHeight = appSettings.value.segmentHeight
     const padding = 1
 
-    const totalWidth = numChars * (segmentWidth + padding * 2)
+    const totalWidth = Math.max(numChars * (segmentWidth + padding * 2), numSegments * (segmentWidth + padding * 2))
     const totalHeight = 3 * (segmentHeight + padding * 2)
 
     outCanvas.width = totalWidth
@@ -190,6 +195,65 @@ function drawPreview() {
     // Line 3: screen composed digits, pure white
     drawLine(2 * (segmentHeight + padding * 2), 'screen')
 }
+
+// --- new: Save current settings + canvases into localStorage / settings input ---
+async function saveSettingsIncludingCanvases() {
+    // validate current JSON in TheSettingsInput
+    if (!settingsInputRef?.value) {
+        console.warn('Settings input ref not available')
+        return
+    }
+    const ok = settingsInputRef.value.validate()
+    if (!ok) {
+        console.warn(
+            'Settings JSON invalid; please fix before saving with canvases'
+        )
+        return
+    }
+  const baseSettings: AppSettings = JSON.parse(
+    JSON.stringify(settingsInputRef.value.parsed)
+  )
+
+    // gather data URLs for each segment canvas
+    const segs: Array<string | null> = []
+    for (let i = 0; i < baseSettings.numSegments; i++) {
+        const c = segmentCanvases.value[i]
+        if (c?.getDataURL) {
+            try {
+                const url = c.getDataURL()
+                segs.push(url)
+            } catch (err) {
+                console.warn('Failed to get dataURL for segment', i, err)
+                segs.push(null)
+            }
+        } else {
+            segs.push(null)
+        }
+    }
+
+    // attach segmentImages (use nulls for missing entries)
+    ;(baseSettings as any).segmentImages = segs.map((s) => s ?? '')
+
+    const jsonText = stringifyCompactArrays(baseSettings, 2)
+    // update the settings input text and localStorage
+    settingsInputRef.value.text = jsonText
+    if (settingsInputRef.value && settingsInputRef.value.save) {
+        // call save to let TheSettingsInput persist & emit
+        settingsInputRef.value.save()
+    } else {
+        // fallback
+        localStorage.setItem('app:settings', jsonText)
+    }
+
+    // also apply to appSettings in-memory so newly added images are recognized
+    appSettings.value = baseSettings
+    // redraw preview (canvases already loaded)
+    drawPreview()
+}
+
+function checkTable() {
+    console.log(findExactGroups(truthTableRef.value))
+}
 </script>
 <template>
     <TheGitIcon />
@@ -212,17 +276,24 @@ function drawPreview() {
     <div class="w-full flex flex-row h-[80vh]">
         <div class="h-full w-[25vw] p-4">
             <TheSettingsInput
+                ref="settingsInputRef"
                 storageKey="app:settings"
                 @update:settings="handleSettingsUpdate" />
             <div class="mt-2 flex gap-2 items-center">
                 <BaseButton @click="clearAllSegments">
                     Clear All Segments
                 </BaseButton>
-                <BaseButton @click="exportAllSegments">
+                <!-- <BaseButton @click="exportAllSegments">
                     Export All Segments
-                </BaseButton>
-                <BaseButton @click="logAllSegmentData">
+                </BaseButton> -->
+                <!-- <BaseButton @click="logAllSegmentData">
                     Log ImageData
+                </BaseButton> -->
+                <BaseButton @click="saveSettingsIncludingCanvases">
+                    Export Settings
+                </BaseButton>
+                <BaseButton @click="checkTable">
+                    Check table
                 </BaseButton>
             </div>
         </div>

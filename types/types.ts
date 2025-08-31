@@ -2,16 +2,15 @@ export interface CanvasAPI {
     clear: () => void
     exportPNG: () => void
     getImageData: () => ImageData | null
+    getDataURL: () => string | null
+    loadFromDataURL: (dataUrl: string) => Promise<void>
 }
 
 export interface AppSettings {
-    baseUrl: string
+    baseUrl?: string
     numSegments: number
     segmentWidth: number
     segmentHeight: number
-    truthTable: { [key: string]: number[] }
-}
-
-export interface OverlayMode {
-    mode: 'screen' | 'additive'
+    truthTable: Record<string, number[]>
+    segmentImages?: string[]
 }
