@@ -1,7 +1,8 @@
 <template>
-    <button
-        type="button"
-        class="w-full inline-flex items-center justify-center gap-2 text-xm lg:text-sm font-medium text-background bg-accent hover:bg-background hover:text-accent border-2 border-accent rounded-md py-2 px-4 transition-colors duration-200">
-        <slot />
-    </button>
+  <button
+    type="button"
+    class="text-xm inline-flex w-full items-center justify-center gap-2 rounded-md border-2 border-accent bg-accent px-4 py-2 font-medium text-background transition-colors duration-200 hover:bg-background hover:text-accent lg:text-sm"
+  >
+    <slot />
+  </button>
 </template>
