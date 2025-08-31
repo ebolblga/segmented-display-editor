@@ -33,7 +33,7 @@ const html = md.render(readmeRaw)
     background-color: transparent;
 }
 
-.markdown-body img {
+/* .markdown-body img {
     display: none;
-}
+} */
 </style>

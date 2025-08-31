@@ -32,7 +32,17 @@
 **4 segment display A (disconnected)**
 
 <p align="center">
-  <img src="app\assets\4-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+  <img src="images/4-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+<p align="center">
+  <img src="public/images/4-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;">
+</p>
+
+<p align="center">
+  <img src="images/4-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;" onerror="this.style.display='none';">
+</p>
+<p align="center">
+  <img src="public/images/4-seg-a.webp" alt="img" style="width:100%; image-rendering: pixelated;" onerror="this.style.display='none';">
 </p>
 
 **4 segment display B (disconnected, overlap)**
