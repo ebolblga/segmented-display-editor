@@ -261,10 +261,10 @@ yarn lint
 
 ## Contributors
 
-<a href="https://github.com/ebolblga/segmented-display-editor/graphs/contributors"> <!-- Edit URL here -->
-<img src="https://contrib.rocks/image?repo=ebolblga/segmented-display-editor"/> <!-- Edit URL here -->
+<a href="https://github.com/ebolblga/segmented-display-editor/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=ebolblga/segmented-display-editor"/>
 </a>
 
-## [License](https://github.com/ebolblga/template/blob/master/LICENSE.md) <!-- Edit URL here -->
+## [License](https://github.com/ebolblga/segmented-display-editor/blob/master/LICENSE.md)
 
 This program is licensed under the MIT License. Please read the License file to know about the usage terms and conditions.

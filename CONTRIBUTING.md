@@ -117,10 +117,17 @@ yarn format
 yarn lint
 ```
 
-## 4. Adding new segmented display preset.
+## 4. Adding new segmented display preset
 After you done with designing the font export it's settings and save the character map image as WebP.
 
 Next follow there guidelines:
+- if display design is someone elses add their name and a url into source section in settings JSON, if yours then add yours:
+```json
+"source": {
+    "author": "<author name>",
+    "url": "<source url>"
+}
+```
 - drop the settings JSON file into [`public/presets/`](https://github.com/ebolblga/segmented-display-editor/tree/main/public/presets) folder and rename it to `<number_of_segments>-seg-<version_a_z>.json`
 - add it as an option to `PresetOption` object in [`types/types.ts`](https://github.com/ebolblga/segmented-display-editor/blob/main/types/types.ts#L38) in the correct place sorted by model version and segment count
 - (optional) add it to [`README.md`](https://github.com/ebolblga/segmented-display-editor/blob/main/README.md#examples) file in the "*Examples*" section. For it to render correctly on GitHub upscale it by 800% using nearest neighbour scaling algorithm. Good tool to use for that is [paint.net](https://www.getpaint.net/download.html). After you have upscaled WebP image drop it into [`public/images`](https://github.com/ebolblga/segmented-display-editor/tree/main/public/images) folder.
